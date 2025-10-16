@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sai lầm trong cải cách ruộng đất năm 1956</title>
+<style>
+  /* ====== PALETTE: VN FLAG ====== */
+  :root{
+    --red:#DA251D;           /* cờ đỏ VN */
+    --red-deep:#8f120f;
+    --red-dark:#250606;
+    --gold:#FFDE00;          /* vàng sao */
+    --gold-soft:#facc15;     /* vàng dịu */
+    --ink:#0a0a0a;
+    --bg:#120404;            /* nền tối ám đỏ */
+    --panel:#1a0707;
+    --card:#130505;
+    --text:#fff7ea;          /* chữ sáng ngà */
+    --muted:#f1cf90;         /* chữ phụ */
+    --border:#3a0c0c;
+    --ring:#ffd95a;
+    --ok:#b7f0c2;
+    --warn:#ffd166;
+    --danger:#ff8a8a;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    color:var(--text);
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 700px at 110% -10%, #8f120f55 0%, transparent 55%),
+      radial-gradient(900px 600px at -20% 110%, #DA251D33 0%, transparent 60%),
+      linear-gradient(180deg, #1a0505 0%, #0b0202 100%);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
+  /* ====== HERO ====== */
+  .hero{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(900px 480px at 130% -20%, #DA251D 0%, transparent 60%),
+      radial-gradient(700px 360px at -20% 120%, #ffbf00 0%, transparent 65%),
+      linear-gradient(180deg, #210707 0%, #120404 100%);
+    border:1px solid var(--border); border-radius:20px;
+    padding:32px 22px 26px;
+    box-shadow:0 18px 40px #0009, inset 0 0 0 1px #ffffff08;
+  }
+  .badge{display:inline-flex;gap:8px;align-items:center;background:#220707;border:1px solid var(--border);color:var(--muted);border-radius:999px;padding:6px 12px;font-size:12px;letter-spacing:.3px}
+  .title{font-size:clamp(24px,3.6vw,40px);line-height:1.15;margin:14px 0 8px;font-weight:900}
+  .subtitle{color:var(--muted);font-size:14px;max-width:78ch}
+  .cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{
+    background:linear-gradient(180deg, #f02a22, #b51612);
+    border:1px solid #ae140f; color:#fff6d6; padding:10px 14px; border-radius:12px; font-weight:700;
+    text-decoration:none; display:inline-block;
+  }
+  .btn.alt{background:#1d0808;border:1px solid var(--border);color:var(--text)}
+  .btn:focus{outline:2px solid var(--ring); outline-offset:2px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}
+  .pill{background:#1e0707;border:1px solid var(--border);color:#ffdca6;padding:8px 12px;border-radius:999px;font-size:12px}
+  /* ====== SECTION ====== */
+  .section{margin:28px 0}
+  .h2{font-size:clamp(18px,2.4vw,26px);font-weight:900;margin:0 0 10px}
+  .lead{color:#ffdf9e;margin:0 0 12px;font-size:14px}
+  .grid{display:grid;gap:12px}
+  @media(min-width:900px){ .grid.cols-3{grid-template-columns:repeat(3,1fr)} .grid.cols-2{grid-template-columns:repeat(2,1fr)} }
+  .card{
+    background:linear-gradient(180deg, #160606 0%, #0f0404 100%);
+    border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;
+  }
+  .card h3{margin:0 0 8px;font-size:16px}
+  .card p{margin:6px 0;color:#ffebc1;font-size:14px}
+  .kw{display:inline-block;background:#2a0a0a;border:1px dashed #4a1212;color:#ffe164;padding:4px 8px;border-radius:999px;font-size:12px;margin:4px 6px 0 0}
+  /* ====== TIMELINE ====== */
+  .timeline{position:relative;padding-left:18px}
+  .timeline::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:2px;background:#5e1414}
+  .t-item{position:relative;padding:8px 0 8px 12px}
+  .t-item::before{content:"";position:absolute;left:-2px;top:14px;width:10px;height:10px;background:var(--gold);border-radius:50%;box-shadow:0 0 0 4px #5e141433}
+  .t-year{font-weight:900;color:var(--gold);letter-spacing:.3px}
+  /* ====== ACCORDIONS ====== */
+  details{border:1px solid var(--border);background:#180707;border-radius:12px;padding:10px 12px}
+  summary{cursor:pointer;font-weight:800}
+  details p{color:#ffe6b0;font-size:14px}
+  /* ====== QUIZ ====== */
+  .quiz{display:grid;gap:10px}
+  .q{background:#160606;border:1px solid var(--border);border-radius:12px;padding:14px}
+  .q h4{margin:0 0 8px}
+  .opt{display:block;margin:6px 0;padding:8px;border:1px dashed #5b1616;border-radius:10px;cursor:pointer}
+  input[type="radio"]{accent-color:#FFD54A}
+  .answer{margin-top:8px;font-size:13px;color:var(--ok);display:none}
+  .q[data-correct="a"] #ra:checked ~ .answer,
+  .q[data-correct="b"] #rb:checked ~ .answer,
+  .q[data-correct="c"] #rc:checked ~ .answer,
+  .q[data-correct="d"] #rd:checked ~ .answer{display:block}
+  /* ====== LINKS / ANCHORS ====== */
+  .anchors{display:flex;gap:8px;flex-wrap:wrap}
+  .anchor{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:#1b0707;color:var(--text);text-decoration:none}
+  .anchor small{color:#ffdca6}
+  a{color:var(--gold-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  /* ====== HEIGHT & LAYOUT TWEAKS FOR EMBED ====== */
+  .minvh{min-height:100vh;display:block}
+  .footer{margin:24px 0 8px;color:#ffdca6;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+  <div class="wrap minvh" id="top">
+    <header class="hero">
+      <span class="badge">Chuyên đề lịch sử · Cải cách ruộng đất</span>
+      <h1 class="title">Sai lầm trong cải cách ruộng đất năm 1956</h1>
+      <p class="subtitle">
+        Mục tiêu “người cày có ruộng” là đúng đắn, nhưng trong tổ chức thực hiện đã xuất hiện
+        sai lầm nghiêm trọng dẫn tới oan sai và hệ lụy xã hội – chính trị; sau đó Đảng kiểm điểm
+        và sửa sai, rút bài học cốt lõi cho công tác lãnh đạo.
+      </p>
+      <div class="cta">
+        <a class="btn" href="#timeline">Xem dòng thời gian</a>
+        <a class="btn alt" href="#keywords">Từ khóa trọng tâm</a>
+        <a class="btn alt" href="#analysis">Khung phân tích</a>
+        <a class="btn alt" href="#quiz">Quiz nhanh</a>
+      </div>
+      <div class="pills" aria-hidden="true">
+        <span class="pill">“người cày có ruộng”</span>
+        <span class="pill">giáo điều · rập khuôn</span>
+        <span class="pill">cường điệu giai cấp</span>
+        <span class="pill">độc đoán · mệnh lệnh</span>
+        <span class="pill">oan sai</span>
+        <span class="pill">HNTW 10 (1956)</span>
+        <span class="pill">sửa sai</span>
+        <span class="pill">bài học: dân chủ – thực tiễn – giám sát</span>
+      </div>
+    </header>
+
+    <!-- Quick anchors -->
+    <div class="section" style="margin-top:18px">
+      <div class="anchors">
+        <a class="anchor" href="#context">Bối cảnh <small>1953–1956</small></a>
+        <a class="anchor" href="#policy">Chủ trương & Mục tiêu</a>
+        <a class="anchor" href="#mistakes">Sai lầm</a>
+        <a class="anchor" href="#impact">Hậu quả</a>
+        <a class="anchor" href="#fix">Sửa sai 1956</a>
+        <a class="anchor" href="#lessons">Bài học</a>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <section class="section" id="timeline">
+      <h2 class="h2">Dòng thời gian khái quát</h2>
+      <p class="lead">Các mốc giúp người xem nắm nhanh tiến trình trước – trong – sau 1956.</p>
+      <div class="card timeline">
+        <div class="t-item">
+          <div class="t-year">1953</div>
+          <div>Thông qua chủ trương giảm tô, giảm tức; ban hành Luật về cải cách ruộng đất; chuẩn bị triển khai.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-year">1954–1955</div>
+          <div>Triển khai trên diện rộng: hiến, tịch thu, trưng thu, trưng mua và chia ruộng cho nông dân nghèo.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-year">1956</div>
+          <div>Xuất hiện sai lầm nghiêm trọng trong chỉ đạo – thực hiện; phát sinh oan sai và hệ lụy ở cơ sở.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-year">9/1956</div>
+          <div>Hội nghị Trung ương 10 kiểm điểm, tự phê bình, kỷ luật; triển khai công tác sửa sai theo kế hoạch.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Keywords -->
+    <section class="section" id="keywords">
+      <h2 class="h2">Từ khóa trọng tâm</h2>
+      <p class="lead">Những cụm từ ngắn gọn để bám sườn khi thuyết trình hoặc đặt làm “nút” điều hướng.</p>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Chủ trương đúng</h3>
+          <p><span class="kw">“Người cày có ruộng”</span> <span class="kw">giảm tô – giảm tức</span> <span class="kw">chia ruộng</span></p>
+          <p>Động viên nông dân, tăng sức mạnh hậu phương.</p>
+        </div>
+        <div class="card">
+          <h3>Nguyên nhân sai lầm</h3>
+          <p><span class="kw">chủ quan – giáo điều</span> <span class="kw">rập khuôn kinh nghiệm ngoài</span> <span class="kw">thiếu bám thực tiễn</span></p>
+        </div>
+        <div class="card">
+          <h3>Biểu hiện</h3>
+          <p><span class="kw">cường điệu đấu tranh giai cấp</span> <span class="kw">mở rộng đối tượng</span> <span class="kw">độc đoán – mệnh lệnh</span></p>
+        </div>
+        <div class="card">
+          <h3>Hậu quả</h3>
+          <p><span class="kw">oan sai</span> <span class="kw">tổn thất cơ sở Đảng</span> <span class="kw">suy giảm niềm tin</span></p>
+        </div>
+        <div class="card">
+          <h3>Sửa sai 1956</h3>
+          <p><span class="kw">HNTW 10</span> <span class="kw">tự phê bình – kỷ luật</span> <span class="kw">khắc phục theo kế hoạch</span></p>
+        </div>
+        <div class="card">
+          <h3>Bài học</h3>
+          <p><span class="kw">thực tiễn trước hết</span> <span class="kw">dân chủ – lắng nghe</span> <span class="kw">kiểm tra – giám sát</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analysis frames -->
+    <section class="section" id="analysis">
+      <h2 class="h2">Khung phân tích nhanh (5 phần)</h2>
+      <p class="lead">Dùng để trình bày theo nhóm 5 người — mỗi khung nói 2–3 phút.</p>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>1) Bối cảnh & Chủ trương</h3>
+          <p>- Mục tiêu, công cụ, phạm vi triển khai.</p>
+          <details><summary>Gợi ý trình bày</summary><p>Nhấn mục tiêu “người cày có ruộng”; hiến/tịch thu/trưng thu/trưng mua & chia ruộng.</p></details>
+        </div>
+        <div class="card">
+          <h3>2) Nguyên nhân sai lầm</h3>
+          <p>- Giáo điều, rập khuôn; không khảo sát đầy đủ thực tiễn.</p>
+          <details><summary>Gợi ý trình bày</summary><p>Chỉ ra sự lệch giữa kinh nghiệm ngoài và bối cảnh nông thôn sau giải phóng.</p></details>
+        </div>
+        <div class="card">
+          <h3>3) Biểu hiện sai lầm</h3>
+          <p>- Cường điệu giai cấp; mở rộng đối tượng; phương pháp mệnh lệnh.</p>
+          <details><summary>Gợi ý trình bày</summary><p>Nêu ví dụ khái quát: quy sai tư cách, xử lý nóng vội.</p></details>
+        </div>
+        <div class="card">
+          <h3>4) Hậu quả</h3>
+          <p>- Oan sai; tổn hại tổ chức cơ sở; niềm tin nhân dân giảm.</p>
+          <details><summary>Gợi ý trình bày</summary><p>Tách hệ quả chính trị, xã hội và tâm lý cộng đồng.</p></details>
+        </div>
+        <div class="card">
+          <h3>5) Sửa sai & Bài học</h3>
+          <p>- HNTW 10 (1956): kiểm điểm, kỷ luật; khắc phục có kế hoạch; rút bài học.</p>
+          <details><summary>Gợi ý trình bày</summary><p>Nhấn tinh thần dám nhìn thẳng sự thật; bài học: dân chủ, thực tiễn, giám sát.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Context -->
+    <section class="section" id="context">
+      <h2 class="h2">Bối cảnh – Vì sao cần cải cách ruộng đất?</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Mục tiêu cốt lõi</h3>
+          <p>“Người cày có ruộng”, giải quyết quan hệ ruộng đất, mở rộng quyền lợi kinh tế – chính trị của nông dân.</p>
+        </div>
+        <div class="card">
+          <h3>Phương thức triển khai</h3>
+          <p>Hiến đất; tịch thu; trưng thu; trưng mua; phân phối cho bần, cố nông và trung nông lớp dưới.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Policy -->
+    <section class="section" id="policy">
+      <h2 class="h2">Chủ trương & mục tiêu thực hiện</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Giảm tô – giảm tức</h3>
+          <p>Đi từng bước, triệt để hóa quá trình trước khi chia ruộng.</p>
+        </div>
+        <div class="card">
+          <h3>Chia ruộng công bằng</h3>
+          <p>Tập trung vào hộ thiếu/không có ruộng; ưu tiên nhóm yếu thế ở nông thôn.</p>
+        </div>
+        <div class="card">
+          <h3>Hậu phương vững</h3>
+          <p>Động viên sức người – sức của, bảo đảm cho nhiệm vụ chung.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mistakes -->
+    <section class="section" id="mistakes">
+      <h2 class="h2">Sai lầm năm 1956 – Nhìn thẳng vấn đề</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Nguyên nhân</h3>
+          <ul>
+            <li>Chủ quan – giáo điều, rập khuôn kinh nghiệm nước ngoài.</li>
+            <li>Không xuất phát đầy đủ từ thực tiễn xã hội nông thôn sau giải phóng.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Biểu hiện</h3>
+          <ul>
+            <li>Cường điệu đấu tranh giai cấp; mở rộng quá mức đối tượng.</li>
+            <li>Phương pháp độc đoán – mệnh lệnh; xử lý thiếu thận trọng.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="section" id="impact">
+      <h2 class="h2">Hậu quả xã hội – chính trị</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Oan sai</h3>
+          <p>Cá nhân và đảng viên tốt bị quy sai – ảnh hưởng quyền lợi, danh dự.</p>
+        </div>
+        <div class="card">
+          <h3>Tổ chức cơ sở</h3>
+          <p>Tổn thất lực lượng ở nông thôn, ảnh hưởng đến hoạt động lãnh đạo.</p>
+        </div>
+        <div class="card">
+          <h3>Niềm tin & đoàn kết</h3>
+          <p>Quan hệ Đảng – Nhân dân bị tổn hại; rạn nứt trong cộng đồng.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fix -->
+    <section class="section" id="fix">
+      <h2 class="h2">Sửa sai (1956)</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>HNTW 10 (9/1956)</h3>
+          <p>Kiểm điểm, tự phê bình công khai; kỷ luật các cá nhân liên quan.</p>
+        </div>
+        <div class="card">
+          <h3>Khắc phục theo kế hoạch</h3>
+          <p>Phục hồi danh dự – quyền lợi; triển khai thận trọng, kiên quyết, có lộ trình.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lessons -->
+    <section class="section" id="lessons">
+      <h2 class="h2">Bài học rút ra</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>1. Bám thực tiễn</h3><p>Tránh rập khuôn; khảo sát kỹ bối cảnh xã hội.</p></div>
+        <div class="card"><h3>2. Dân chủ</h3><p>Lắng nghe nhân dân; chống quan liêu – mệnh lệnh.</p></div>
+        <div class="card"><h3>3. Giám sát</h3><p>Tăng cường kiểm tra; phát hiện & sửa sai kịp thời.</p></div>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="section" id="quiz">
+      <h2 class="h2">Quiz nhanh (2 câu)</h2>
+      <p class="lead">Chọn đáp án bạn cho là đúng — đáp án sẽ hiện ngay bên dưới.</p>
+      <div class="quiz">
+        <div class="q" data-correct="a">
+          <h4>1) Nguyên nhân khái quát dẫn tới sai lầm 1956 là:</h4>
+          <label class="opt"><input type="radio" id="ra" name="q1"> a) Giáo điều, rập khuôn, không xuất phát từ thực tiễn</label>
+          <label class="opt"><input type="radio" id="rb" name="q1"> b) Thiếu văn bản pháp lý triển khai</label>
+          <label class="opt"><input type="radio" id="rc" name="q1"> c) Không có mục tiêu rõ ràng</label>
+          <label class="opt"><input type="radio" id="rd" name="q1"> d) Do điều kiện thời tiết</label>
+          <div class="answer">✔ Đúng rồi! Trọng tâm là sự giáo điều/rập khuôn và không bám sát thực tiễn.</div>
+        </div>
+        <div class="q" data-correct="c">
+          <h4>2) Biểu hiện điển hình của sai lầm là:</h4>
+          <label class="opt"><input type="radio" id="r2a" name="q2"> a) Chia ruộng theo tự nguyện</label>
+          <label class="opt"><input type="radio" id="r2b" name="q2"> b) Tăng thuế nông nghiệp</label>
+          <label class="opt"><input type="radio" id="r2c" name="q2"> c) Cường điệu đấu tranh giai cấp, mở rộng đối tượng, mệnh lệnh</label>
+          <label class="opt"><input type="radio" id="r2d" name="q2"> d) Chỉ phát động ở đô thị</label>
+          <div class="answer">✔ Chính xác! Cường điệu đấu tranh giai cấp + mở rộng đối tượng + mệnh lệnh.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Trang web tĩnh phục vụ thuyết trình học phần Lịch sử · <a href="#top">Lên đầu trang</a></p>
+    </footer>
+  </div>
+
+<script>
+  /* Smooth scroll trong khung nhúng */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.getAttribute('href');
+      if(id.length>1){
+        e.preventDefault();
+        document.querySelector(id)?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    })
+  });
+
+  /* Giảm khoảng trắng: đặt chiều cao body theo nội dung sau khi render */
+  function fitHeight(){
+    const h = document.documentElement.scrollHeight;
+    document.body.style.height = h + 'px';
+  }
+  window.addEventListener('load', fitHeight);
+  window.addEventListener('resize', ()=>{ clearTimeout(window.__rsz); window.__rsz=setTimeout(fitHeight,150); });
+
+  /* Bảo đảm vùng nhìn tối thiểu 100vh trong khối embed */
+  (function ensureMinVh(){
+    const root = document.querySelector('.minvh');
+    if(root){ root.style.minHeight = Math.max(window.innerHeight, root.offsetHeight) + 'px'; }
+  })();
+</script>
+</body>
+</html>
