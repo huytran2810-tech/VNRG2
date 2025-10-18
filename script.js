@@ -691,7 +691,7 @@ function makeFigure(item, role) {
     fig.className = `figure ${role}` + (role === 'figure' && item.ratio > 1.2 ? ' figure-43' : '');
     
     const img = document.createElement('img');
-    img.src = `/assets/images/ccrd/${item.file}`;
+    img.src = `https://github.com/huytran2810-tech/VNRG2/blob/main/assets/images/ccrd/${item.file}`;
     img.alt = toAlt(item);
     img.loading = 'lazy';
     img.decoding = 'async';
@@ -861,5 +861,6 @@ function validateContent() {
     console.log('✅ Kiểm thử logic thành công - có đúng 8 h2 và tất cả ID');
     return true;
 }
+
 
 // Evidence highlighting và copy buttons đã được loại bỏ
