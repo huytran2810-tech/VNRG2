@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCRD — Tư liệu lịch sử</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">CCRD</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#mo-dau-boi-canh" class="nav-link">Bối cảnh</a>
+                <a href="#chinh-sach-1953" class="nav-link">1953</a>
+                <a href="#trien-khai-1954-1955" class="nav-link">1954–55</a>
+                <a href="#sai-lam-1956" class="nav-link">Sai lầm 1956</a>
+                <a href="#hau-qua-sua-sai" class="nav-link">Sửa sai</a>
+                <a href="#bai-hoc-lich-su" class="nav-link">Bài học</a>
+                <a href="#lien-he-hien-nay" class="nav-link">Hiện nay</a>
+                <a href="#ket-luan" class="nav-link">Kết luận</a>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" data-animate="fade-up">CCRD — Tư liệu lịch sử</h1>
+            <p class="hero-subtitle" data-animate="fade-up" data-delay="200">Cải cách Ruộng đất Việt Nam – Bối cảnh, Chính sách và Bài học</p>
+            <button class="btn btn-primary" data-animate="fade-up" data-delay="400" onclick="scrollToSection('mo-dau-boi-canh')">
+                Khám phá nội dung
+            </button>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-indicator">
+                <span>Cuộn xuống</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Content will be rendered here by JavaScript -->
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <!-- Table of Contents -->
+    <aside class="toc" id="toc">
+        <div class="toc-header">
+            <h3>Mục lục</h3>
+            <button class="toc-toggle" id="toc-toggle">×</button>
+        </div>
+        <ul class="toc-list" id="toc-list">
+            <!-- Will be populated by JavaScript -->
+        </ul>
+    </aside>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">CCRD</span>
+                    <p>Tư liệu lịch sử</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#mo-dau-boi-canh">Bối cảnh</a>
+                    <a href="#chinh-sach-1953">Chính sách 1953</a>
+                    <a href="#trien-khai-1954-1955">Triển khai 1954-1955</a>
+                    <a href="#sai-lam-1956">Sai lầm 1956</a>
+                </div>
+                <div class="footer-info">
+                    <p>Nguồn tài liệu: Outline VNR.docx</p>
+                    <p>Ngày build: <span id="build-date"></span></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 - Dự án nghiên cứu Cải cách Ruộng đất Việt Nam</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <button class="fab" id="back-to-top" title="Về đầu trang">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M7 14L12 9L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="fab" id="toggle-toc" title="Mục lục">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
