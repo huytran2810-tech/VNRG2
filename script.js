@@ -624,6 +624,11 @@ function buildTOC() {
         a.addEventListener('click', function(e) {
             e.preventDefault();
             smoothScrollTo(h2.id);
+            // Tự động đóng mục lục sau khi click link
+            const toc = document.getElementById('toc');
+            if (toc) {
+                toc.classList.add('hidden');
+            }
         });
         
         li.appendChild(a);
@@ -709,15 +714,28 @@ function observeAnimations() {
 function setupFloatingButtons() {
     const backToTop = document.getElementById('back-to-top');
     const toggleToc = document.getElementById('toggle-toc');
+    const tocToggle = document.getElementById('toc-toggle'); // Nút X trong mục lục
     const toc = document.getElementById('toc');
     
     backToTop.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     
+    // Nút mở/đóng mục lục (FAB)
     toggleToc.addEventListener('click', () => {
         toc.classList.toggle('hidden');
     });
+    
+    // Nút X để đóng mục lục
+    if (tocToggle) {
+        tocToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Nút X được click - đóng mục lục');
+            toc.classList.add('hidden');
+        });
+    } else {
+        console.error('Không tìm thấy nút toc-toggle');
+    }
     
     // Show/hide back to top button
     window.addEventListener('scroll', () => {
