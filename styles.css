@@ -283,7 +283,7 @@ h2, h3 {
 }
 
 .figure.banner .img {
-    aspect-ratio: 3 / 1;
+    aspect-ratio: 3 / 2;
     object-fit: cover;
 }
 
