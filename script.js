@@ -691,7 +691,7 @@ function makeFigure(item, role) {
     fig.className = `figure ${role}` + (role === 'figure' && item.ratio > 1.2 ? ' figure-43' : '');
     
     const img = document.createElement('img');
-    img.src = `https://github.com/huytran2810-tech/VNRG2/blob/main/assets/images/ccrd/${item.file}`;
+    img.src = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/${item.file}`;
     img.alt = toAlt(item);
     img.loading = 'lazy';
     img.decoding = 'async';
@@ -789,7 +789,7 @@ function mountImages() {
         const heroSection = document.querySelector('.hero');
         if (heroSection) {
             const heroImg = document.createElement('img');
-            heroImg.src = `/assets/images/ccrd/${heroImage.file}`;
+            heroImg.src = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/${heroImage.file}`;
             heroImg.alt = toAlt(heroImage);
             heroImg.className = 'hero-bg';
             heroImg.loading = 'eager';
@@ -864,4 +864,5 @@ function validateContent() {
 
 
 // Evidence highlighting và copy buttons đã được loại bỏ
+
 
