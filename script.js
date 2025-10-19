@@ -249,10 +249,48 @@ const SECTION_MAPPING = {
     'VIII. Kết luận': { id: 'ket-luan', label: 'Kết luận' }
 };
 
-// Asset Manifest (build-time)
+// ===== CẤU HÌNH ẢNH CHI TIẾT - NGƯỜI DÙNG CÓ THỂ THAY ĐỔI =====
+// 
+// HƯỚNG DẪN SỬ DỤNG:
+// 1. Thay đổi URL cho từng ảnh theo mục đích sử dụng
+// 2. Mỗi ảnh có tên biến mô tả rõ chức năng và vị trí hiển thị
+// 3. Có thể sử dụng URL khác nhau cho từng ảnh (local, CDN, cloud...)
+// 4. Tên biến theo format: [loại]_[mô_tả]_[năm/nội_dung]
+//
+// CÁC LOẠI ẢNH:
+// - background_* : Ảnh nền hero
+// - banner_* : Ảnh banner cho các section
+// - figure_* : Ảnh minh họa trong nội dung
+
+// === ẢNH HERO & BANNER ===
+const background_hero = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/30da43bac67c44079328641450f2dd3a_result.jpeg`;
+const banner_ccrd_general = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/Cai_cach_ruong_dat5.jpg`;
+const banner_policy_1953 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/caicachruongdat.jpg`;
+const banner_sua_sai = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/HQPD_1381178844.jpg`;
+
+// === ẢNH FIGURE - TRIỂN KHAI 1954-1955 ===
+const figure_trien_khai_1954 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/cai-cach-ruong-dat-1954-tai-cac-tinh-mien-bac.jpg`;
+
+// === ẢNH FIGURE - LUẬT & CHÍNH SÁCH ===
+const figure_luat_197_sl = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/cai-cach-ruong-dat-doisongphapluat-17.jpg`;
+
+// === ẢNH FIGURE - HỒ CHÍ MINH ===
+const figure_hcm_1953 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/cthcm-cuoi-195321102023104648.jpg`;
+const figure_hcm_tham = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/hcm_di_tham.jpg`;
+
+// === ẢNH FIGURE - ĐẤU TỐ & SAI LẦM ===
+const figure_dau_to_ceremony = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/dieuhanhchaomung_caicach.jpg`;
+const figure_dau_to_trial_1 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/trial-of-a-bourgeois-landowner-in-north-vietnam-1955_5125225272_o_result.jpg`;
+const figure_dau_to_trial_2 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/trial-of-a-bourgeois-landowner-in-north-vietnam-1955---u-t-a-ch-ti-bc-vit_5124618507_o_result (1).jpg`;
+
+// === ẢNH FIGURE - BÀI HỌC & HIỆN NAY ===
+const figure_bai_hoc = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/MXVQHAVVRRAMOYHDRW2CE2H6XA.jpg`;
+const figure_hien_nay = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/Screenshot 2025-10-18 164552.png`;
+
+// Asset Manifest - Sử dụng các biến URL đã định nghĩa
 const ASSET_MANIFEST = [
     {
-        file: "30da43bac67c44079328641450f2dd3a_result.jpeg",
+        url: background_hero,
         title: "Bối cảnh 1954",
         caption: "Miền Bắc sau giải phóng",
         tags: ["boi-canh", "1954", "hero", "banner"],
@@ -263,7 +301,7 @@ const ASSET_MANIFEST = [
         ratio: 16/9
     },
     {
-        file: "Cai_cach_ruong_dat5.jpg",
+        url: banner_ccrd_general,
         title: "Cải cách ruộng đất",
         caption: "Quá trình cải cách ruộng đất tại miền Bắc",
         tags: ["ccrd", "1953", "banner", "figure"],
@@ -274,7 +312,7 @@ const ASSET_MANIFEST = [
         ratio: 3/1
     },
     {
-        file: "cai-cach-ruong-dat-1954-tai-cac-tinh-mien-bac.jpg",
+        url: figure_trien_khai_1954,
         title: "Triển khai 1954-1955",
         caption: "Cải cách ruộng đất tại các tỉnh miền Bắc",
         tags: ["1954", "1955", "trien-khai", "figure"],
@@ -285,7 +323,7 @@ const ASSET_MANIFEST = [
         ratio: 4/3
     },
     {
-        file: "cai-cach-ruong-dat-doisongphapluat-17.jpg",
+        url: figure_luat_197_sl,
         title: "Luật CCRD 1953",
         caption: "Văn bản Luật Cải cách ruộng đất 1953",
         tags: ["1953", "luat", "197-sl", "figure"],
@@ -296,7 +334,7 @@ const ASSET_MANIFEST = [
         ratio: 3/4
     },
     {
-        file: "caicachruongdat.jpg",
+        url: banner_policy_1953,
         title: "Chính sách 1953",
         caption: "Tài liệu về chính sách cải cách ruộng đất",
         tags: ["1953", "chinh-sach", "banner"],
@@ -307,7 +345,7 @@ const ASSET_MANIFEST = [
         ratio: 3/1
     },
     {
-        file: "cthcm-cuoi-195321102023104648.jpg",
+        url: figure_hcm_1953,
         title: "Chủ tịch Hồ Chí Minh",
         caption: "Chủ tịch Hồ Chí Minh cuối năm 1953",
         tags: ["hcm", "1953", "leader", "figure"],
@@ -318,7 +356,7 @@ const ASSET_MANIFEST = [
         ratio: 3/4
     },
     {
-        file: "dieuhanhchaomung_caicach.jpg",
+        url: figure_dau_to_ceremony,
         title: "Điều hành chào mừng",
         caption: "Lễ chào mừng cải cách ruộng đất",
         tags: ["dau-to", "sai-lam", "figure"],
@@ -329,7 +367,7 @@ const ASSET_MANIFEST = [
         ratio: 4/3
     },
     {
-        file: "hcm_di_tham.jpg",
+        url: figure_hcm_tham,
         title: "Hồ Chí Minh đi thăm",
         caption: "Chủ tịch Hồ Chí Minh đi thăm nông dân",
         tags: ["hcm", "tham", "figure"],
@@ -340,7 +378,7 @@ const ASSET_MANIFEST = [
         ratio: 3/2
     },
     {
-        file: "HQPD_1381178844.jpg",
+        url: banner_sua_sai,
         title: "Hậu quả và sửa sai",
         caption: "Công tác sửa sai sau cải cách ruộng đất",
         tags: ["sua-sai", "hoi-nghi-10", "banner"],
@@ -351,7 +389,7 @@ const ASSET_MANIFEST = [
         ratio: 3/1
     },
     {
-        file: "MXVQHAVVRRAMOYHDRW2CE2H6XA.jpg",
+        url: figure_bai_hoc,
         title: "Bài học lịch sử",
         caption: "Rút ra bài học từ cải cách ruộng đất",
         tags: ["bai-hoc", "lesson", "figure"],
@@ -362,7 +400,7 @@ const ASSET_MANIFEST = [
         ratio: 4/3
     },
     {
-        file: "Screenshot 2025-10-18 164552.png",
+        url: figure_hien_nay,
         title: "Hiện nay",
         caption: "Chính sách đất đai hiện tại",
         tags: ["hien-nay", "today", "luat-dat-dai", "figure"],
@@ -373,7 +411,7 @@ const ASSET_MANIFEST = [
         ratio: 4/3
     },
     {
-        file: "trial-of-a-bourgeois-landowner-in-north-vietnam-1955_5125225272_o_result.jpg",
+        url: figure_dau_to_trial_1,
         title: "Phiên đấu tố 1955",
         caption: "Phiên đấu tố địa chủ tại miền Bắc 1955",
         tags: ["dau-to", "sai-lam", "1955", "figure"],
@@ -384,7 +422,7 @@ const ASSET_MANIFEST = [
         ratio: 4/3
     },
     {
-        file: "trial-of-a-bourgeois-landowner-in-north-vietnam-1955---u-t-a-ch-ti-bc-vit_5124618507_o_result (1).jpg",
+        url: figure_dau_to_trial_2,
         title: "Đấu tố địa chủ",
         caption: "Phiên đấu tố địa chủ tại miền Bắc",
         tags: ["dau-to", "sai-lam", "figure"],
@@ -691,7 +729,7 @@ function makeFigure(item, role) {
     fig.className = `figure ${role}` + (role === 'figure' && item.ratio > 1.2 ? ' figure-43' : '');
     
     const img = document.createElement('img');
-    img.src = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/${item.file}`;
+    img.src = item.url;
     img.alt = toAlt(item);
     img.loading = 'lazy';
     img.decoding = 'async';
@@ -789,11 +827,11 @@ function mountImages() {
         const heroSection = document.querySelector('.hero');
         if (heroSection) {
             const heroImg = document.createElement('img');
-            heroImg.src = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/${heroImage.file}`;
+            heroImg.src = heroImage.url;
             heroImg.alt = toAlt(heroImage);
             heroImg.className = 'hero-bg';
             heroImg.loading = 'eager';
-            heroSection.style.backgroundImage = `url(https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/assets/images/ccrd/${heroImage.file})`;
+            heroSection.style.backgroundImage = `url(${heroImage.url})`;
             heroSection.style.backgroundSize = 'cover';
             heroSection.style.backgroundPosition = 'center';
         }
@@ -858,7 +896,7 @@ function validateContent() {
         console.warn(`TOC có ${tocLinks.length} mục thay vì 8`);
     }
     
-    console.log('✅ Kiểm thử logic thành công - có đúng 8 h2 và tất cả ID');
+    console.log('');
     return true;
 }
 
