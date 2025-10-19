@@ -449,29 +449,6 @@ const ASSET_MANIFEST = [
     }
 ];
 
-// ===== DOCX LOADER =====
-async function loadDocxToHtml(path = "https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx") {
-    const res = await fetch(path);
-    const arrayBuffer = await res.arrayBuffer();
-    const styleMap = [
-        "p[style-name='Heading 1'] => h1:fresh",
-        "p[style-name='Heading 2'] => h2:fresh",
-        "p[style-name='Heading 3'] => h3:fresh",
-        "b => strong",
-        "i => em",
-    ].join("\n");
-    const { value: html } = await window.mammoth.convertToHtml(
-        { arrayBuffer },
-        { styleMap, includeDefaultStyleMap: true, ignoreEmptyParagraphs: true }
-    );
-    return html;
-}
-
-async function renderFromDocx() {
-    const html = await loadDocxToHtml();
-    const root = document.getElementById("content");
-    root.innerHTML = html;
-}
 
 // ==== Config 8 mục cấp 1 ====
 const TOP_TITLES = [
@@ -642,63 +619,6 @@ function safeCleanup(root){
     });
 }
 
-
-// ==== Entry: render từ DOCX đúng 8 mục, 1 lần ====
-async function rebuildFromDocx() {
-    const mount = document.getElementById("content");
-    if(!mount || mount.dataset.rendered === "true") return;
-    mount.dataset.rendered = "true";
-
-    const arrayBuffer = await fetch("https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx").then(r=>r.arrayBuffer());
-    const { value: html } = await window.mammoth.convertToHtml({ arrayBuffer }, { styleMap: [] });
-
-    const tmp = document.createElement("div");
-    tmp.innerHTML = html;
-
-    safeCleanup(tmp);         // GIỮ <strong>/<em>
-    normalizeH1ToH2(tmp);     // đồng nhất cấp tiêu đề
-    detectSectionAnchors(tmp, TOP_TITLES);    // ép đủ 8 neo H2 đúng id
-    const frag = sliceIntoEightSections(tmp, TOP_TITLES); // cắt thành 8 section
-
-    // mount 1 lần, không append chồng
-    mount.replaceChildren(frag);
-
-    // Log kiểm tra sections
-    console.log("✅ Sections:", ...Array.from(frag.querySelectorAll("section.level-1")).map(s => `${s.id}:${s.childNodes.length}`));
-
-    // Rebuild TOC
-    const toc = document.getElementById("toc-list") || document.getElementById("tocList");
-    if(toc){
-        toc.innerHTML = "";
-        TOP_TITLES.forEach(({id, title})=>{
-            const li = document.createElement("li");
-            const a = document.createElement("a");
-            a.href = `#${id}`;
-            a.className = "toc-link";
-            a.textContent = title.replace(RX_ROMAN,"").trim();
-            li.appendChild(a);
-            toc.appendChild(li);
-        });
-    }
-
-    // Logs kiểm thử
-    const h1 = document.querySelectorAll("#content h1").length;
-    const h2 = document.querySelectorAll("#content h2.h-level-1").length;
-    const strong = document.querySelectorAll("#content strong").length;
-    const em = document.querySelectorAll("#content em").length;
-    console.log(`📊 After render: H1=${h1}, H2=${h2} (expect 8)`);
-    console.log(`🔤 strong=${strong}, em=${em} (must >> 0)`);
-    console.log(`✅ IDs:`, TOP_TITLES.map(x=>x.id).filter(id=>document.getElementById(id)));
-    
-    // Các init khác
-    setupNavigation();
-    observeAnimations();
-    setupFloatingButtons();
-    setBuildDate();
-    validateContent();
-}
-
-document.addEventListener("DOMContentLoaded", rebuildFromDocx);
 
 // Render nội dung
 function render() {
