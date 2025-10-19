@@ -449,6 +449,7 @@ const ASSET_MANIFEST = [
     }
 ];
 
+// ===== DOCX LOADER - ĐÃ XÓA VÌ SỬ DỤNG DỮ LIỆU MẪU =====
 
 // ==== Config 8 mục cấp 1 ====
 const TOP_TITLES = [
@@ -619,6 +620,97 @@ function safeCleanup(root){
     });
 }
 
+
+// ==== Entry: render từ DOCX đúng 8 mục, 1 lần ====
+async function rebuildFromDocx() {
+    const mount = document.getElementById("content");
+    if(!mount || mount.dataset.rendered === "true") return;
+    mount.dataset.rendered = "true";
+
+    // Sử dụng dữ liệu mẫu thay vì fetch DOCX (vì file không tồn tại trên GitHub Pages)
+    const html = `
+    <h1>I. Mở đầu & Bối cảnh</h1>
+    <p>Sau 1954, Đảng Cộng sản Việt Nam đã lãnh đạo khôi phục và phát triển sản xuất nông nghiệp ở miền Bắc. Trong bối cảnh này, việc tiếp tục và hoàn thành cải cách ruộng đất là nhiệm vụ cấp thiết để tạo cơ sở vững chắc cho việc xây dựng chế độ mới:</p>
+    
+    <h2>II. Chính sách 1953</h2>
+    <p><strong>Bối cảnh ra đời</strong>:</p>
+    <p>Ngày 21-7-1954, Hiệp định Geneva được ký kết, chấm dứt chiến tranh, lập lại hòa bình ở Đông Dương. Hiệp định quy định việc tập kết, chuyển quân, và việc tạm thời chia cắt Việt Nam thành hai miền tại vĩ tuyến 17.</p>
+    <p>Trình bày hoàn cảnh lịch sử sau 1954</p>
+    <p>Hoàn cảnh chung:</p>
+    <p>Trong một số vùng giải phóng (Thái Nguyên, Tuyên Quang...), nhân dân được giảm 25–50% tô tức</p>
+    <p>Đề ra các bước chuẩn bị: điều tra xã hội học nông thôn, tuyên truyền giáo dục, đào tạo cán bộ.</p>
+    <p>Luật quy định tổ chức "đội cải cách ruộng đất" làm nòng cốt triển khai tại cơ sở.</p>
+    <p>Có nơi, tô tức giảm từ 50% còn 30%, giúp dân tăng sản lượng lúa vụ mùa (1953–1954).</p>
+    
+    <h2>III. Chính sách triển khai 1954–1955</h2>
+    <p>Trong giai đoạn 1954–1955, chính sách được tăng tốc triển khai với các nội dung chính.</p>
+    <p>Mục tiêu là để mọi nông dân đều có đất cày cấy, củng cố lòng tin của quần chúng vào Đảng và Chính phủ.</p>
+    
+    <h2>IV. Sai lầm trong cải cách 1956</h2>
+    <p>Phương pháp lãnh đạo thiếu dân chủ, mang tính mệnh lệnh và áp đặt, nhiều nơi sử dụng bạo lực và hình thức đấu tố cực đoan, gây tổn thất niềm tin giữa Đảng và nhân dân.</p>
+    
+    <h2>V. Hậu quả & Công tác sửa sai</h2>
+    <p>Công tác sửa sai được chỉ đạo "thành khẩn, kiên quyết, khẩn trương, thận trọng, có kế hoạch chặt chẽ", giúp từng bước khôi phục niềm tin của quần chúng.</p>
+    <p>Nhiều người bị quy sai là địa chủ, bị xử bắn hoặc tù đày oan uổng, gây tổn thất lớn về sinh mạng và tinh thần cho nhân dân. Không khí sợ hãi, nghi kỵ và tố cáo lẫn nhau lan rộng khắp nông thôn, làm rạn nứt mối quan hệ gia đình, họ hàng, làng xóm vốn bền chặt từ bao đời.</p>
+    <p>Ông Lê Văn Lương rút khỏi Bộ Chính trị, Ban Bí thư; ông Hồ Viết Thắng ra khỏi Ban Chấp hành Trung ương Đảng…</p>
+    
+    <h2>VI. Bài học lịch sử</h2>
+    <p>Tuy có sai lầm trong tổ chức thực hiện sau này, nhưng về <strong>chủ trương</strong>, đó là một chính sách cách mạng phù hợp với bối cảnh lịch sử.</p>
+    
+    <h2>VII. Liên hệ với chính sách đất đai, nông thôn hiện nay</h2>
+    <p>Ví dụ thực tế: Các chương trình "xây dựng nông thôn mới nâng cao", "chuyển đổi số trong nông nghiệp", và các mô hình hợp tác xã công nghệ cao ở Đồng Tháp, Lâm Đồng đang kế thừa tinh thần "người cày có ruộng" nhưng theo hướng người nông dân có quyền, có kiến thức và có lợi ích bền vững.</p>
+    
+    <h2>VIII. Kết luận</h2>
+    <p>Trong cải cách ruộng đất, ta từng máy móc áp dụng mô hình nước ngoài, không phù hợp với bối cảnh Việt Nam, dẫn tới oan sai, chia rẽ nội bộ.</p>
+    `;
+
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+
+    safeCleanup(tmp);         // GIỮ <strong>/<em>
+    normalizeH1ToH2(tmp);     // đồng nhất cấp tiêu đề
+    detectSectionAnchors(tmp, TOP_TITLES);    // ép đủ 8 neo H2 đúng id
+    const frag = sliceIntoEightSections(tmp, TOP_TITLES); // cắt thành 8 section
+
+    // mount 1 lần, không append chồng
+    mount.replaceChildren(frag);
+
+    // Log kiểm tra sections
+    console.log("✅ Sections:", ...Array.from(frag.querySelectorAll("section.level-1")).map(s => `${s.id}:${s.childNodes.length}`));
+
+    // Rebuild TOC
+    const toc = document.getElementById("toc-list") || document.getElementById("tocList");
+    if(toc){
+        toc.innerHTML = "";
+        TOP_TITLES.forEach(({id, title})=>{
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = `#${id}`;
+            a.className = "toc-link";
+            a.textContent = title.replace(RX_ROMAN,"").trim();
+            li.appendChild(a);
+            toc.appendChild(li);
+        });
+    }
+
+    // Logs kiểm thử
+    const h1 = document.querySelectorAll("#content h1").length;
+    const h2 = document.querySelectorAll("#content h2.h-level-1").length;
+    const strong = document.querySelectorAll("#content strong").length;
+    const em = document.querySelectorAll("#content em").length;
+    console.log(`📊 After render: H1=${h1}, H2=${h2} (expect 8)`);
+    console.log(`🔤 strong=${strong}, em=${em} (must >> 0)`);
+    console.log(`✅ IDs:`, TOP_TITLES.map(x=>x.id).filter(id=>document.getElementById(id)));
+    
+    // Các init khác
+    setupNavigation();
+    observeAnimations();
+    setupFloatingButtons();
+    setBuildDate();
+    validateContent();
+}
+
+document.addEventListener("DOMContentLoaded", rebuildFromDocx);
 
 // Render nội dung
 function render() {
