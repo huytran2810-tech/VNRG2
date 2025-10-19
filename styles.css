@@ -305,6 +305,206 @@ h2, h3 {
     text-align: center;
 }
 
+/* CSS tối thiểu để căn lề đồng đều */
+:root{
+  --container-max: 1280px;
+  --container-pad: clamp(16px, 2.5vw, 36px);
+  --toc-w: clamp(240px, 22vw, 320px);
+}
+
+/* Container fluid + center */
+.content-container{
+  width: min(var(--container-max), 96vw);
+  margin: 0 auto;
+  padding-inline: var(--container-pad);
+}
+
+/* Wrapper mới bao cả main + aside - 1 cột */
+.page-grid{
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* TOC overlay - không chiếm chỗ content */
+.toc {
+  position: fixed;
+  right: clamp(8px, 2vw, 24px);
+  top: clamp(72px, 8vh, 120px);
+  width: var(--toc-w);
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+  z-index: 1000;
+}
+
+.toc.hidden { 
+  display: none !important; 
+}
+
+#content { 
+    display: block;
+    width: 100%;
+    margin: 0 auto; 
+    padding: 16px 20px; 
+    line-height: 1.75; 
+    box-sizing: border-box;
+}
+
+/* Tiêu đề tương xứng vùng rộng hơn */
+.h-level-1{ 
+    font-size: clamp(28px, 2.2vw, 36px); 
+    line-height: 1.25; 
+    margin-top: 56px; 
+    margin-bottom: 16px; 
+    font-weight: 800; 
+    scroll-margin-top: 96px;
+}
+
+.h-level-2{ 
+    font-size: clamp(18px, 1.25vw, 22px); 
+    line-height: 1.5; 
+    margin-top: 28px; 
+    margin-bottom: 10px; 
+    font-weight: 700; 
+    scroll-margin-top: 96px;
+}
+
+#content .level-2 > * { 
+    margin: 10px 0; 
+}
+
+/* Thẻ section thoáng hơn - full width */
+.section-card{ 
+    padding: 32px 40px; 
+    border-radius: 14px; 
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    box-sizing: border-box;
+    display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0;
+}
+
+.section-card.level-1 { 
+    padding-bottom: 28px; 
+    border-bottom: 1px solid rgba(0,0,0,.06); 
+}
+
+/* Giữ bold/italic rõ ràng */
+#content strong { font-weight: 700; }
+#content em { font-style: italic; }
+
+/* Đảm bảo text không tràn ra ngoài section */
+.section-card * {
+    max-width: none;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+
+/* Loại viền/nút rác nếu còn sót */
+#content .copy-btn { display: none !important; }
+#content .evidence { all: unset; }
+
+/* Đặc biệt cho section "Mở đầu & Bối cảnh" */
+#mo-dau-boi-canh {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+}
+
+#mo-dau-boi-canh * {
+    max-width: none !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ====== CSS CHO ẢNH ====== */
+.img-block, .img-gallery{
+  margin: 16px 0 24px;
+}
+.img-block .img-item{
+  display: block;
+}
+.img-gallery{
+  display: grid;
+  gap: clamp(10px, 1.2vw, 16px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.img-item img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.25);
+}
+.img-item figcaption{
+  font-size: .92rem;
+  opacity: .9;
+  margin-top: .4rem;
+}
+.hero{
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Font hỗ trợ tiếng Việt */
+body {
+    font-family: 'Inter', 'Noto Serif Vietnamese', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+/* Màu sắc và tương phản - đã được định nghĩa ở trên */
+
+/* Nền section vàng → chữ đen/đỏ sẫm */
+.section-card[data-tone='gold'] {
+    background: linear-gradient(135deg, #ffd400, #ff8c00);
+    color: #2a2410; /* chữ sẫm trên nền vàng */
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0;
+}
+
+.section-card[data-tone='gold'] h2,
+.section-card[data-tone='gold'] h3 {
+    color: #1a1500;
+}
+
+/* Nền hero/section đỏ → chữ trắng với overlay */
+.hero-overlay {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+}
+
+.section-card[data-tone='red'] {
+    background: linear-gradient(135deg, var(--red-800), var(--red-700));
+    color: var(--text);
+    position: relative;
+}
+
+.section-card[data-tone='red']::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
 /* Hero background */
 .hero {
     position: relative;

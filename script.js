@@ -449,53 +449,277 @@ const ASSET_MANIFEST = [
     }
 ];
 
-// Khởi tạo ứng dụng
-document.addEventListener('DOMContentLoaded', function() {
-    render();
+// ===== DOCX LOADER =====
+async function loadDocxToHtml(path = "/content/Outline VNR.docx") {
+    const res = await fetch(path);
+    const arrayBuffer = await res.arrayBuffer();
+    const styleMap = [
+        "p[style-name='Heading 1'] => h1:fresh",
+        "p[style-name='Heading 2'] => h2:fresh",
+        "p[style-name='Heading 3'] => h3:fresh",
+        "b => strong",
+        "i => em",
+    ].join("\n");
+    const { value: html } = await window.mammoth.convertToHtml(
+        { arrayBuffer },
+        { styleMap, includeDefaultStyleMap: true, ignoreEmptyParagraphs: true }
+    );
+    return html;
+}
+
+async function renderFromDocx() {
+    const html = await loadDocxToHtml();
+    const root = document.getElementById("content");
+    root.innerHTML = html;
+}
+
+// ==== Config 8 mục cấp 1 ====
+const TOP_TITLES = [
+    { id: "mo-dau-boi-canh", title: "I. Mở đầu & Bối cảnh" },
+    { id: "chinh-sach-1953", title: "II. Chính sách 1953" },
+    { id: "trien-khai-1954-1955", title: "III. Chính sách triển khai 1954–1955" },
+    { id: "sai-lam-1956", title: "IV. Sai lầm trong cải cách 1956" },
+    { id: "hau-qua-sua-sai", title: "V. Hậu quả & Công tác sửa sai" },
+    { id: "bai-hoc-lich-su", title: "VI. Bài học lịch sử" },
+    { id: "lien-he-hien-nay", title: "VII. Liên hệ với chính sách đất đai, nông thôn hiện nay" },
+    { id: "ket-luan", title: "VIII. Kết luận" },
+];
+
+const RX_ROMAN = /^\s*[IVXLCDM]+\s*[\.\)\-]?\s+/i;
+const toKey = s => (s||"")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase().replace(/\s+/g," ").trim();
+
+// 1) Giữ bold/italic trước khi đụng đến style
+function convertInlineBoldItalic(root){
+    root.querySelectorAll("span[style], p span[style], em[style], strong[style]").forEach(span=>{
+        const st = (span.getAttribute("style")||"").toLowerCase();
+        const isBold = /font-weight\s*:\s*(bold|[7-9]00)/.test(st);
+        const isItalic = /font-style\s*:\s*italic/.test(st);
+        if(!isBold && !isItalic) return;
+
+        let node = span;
+        // bọc theo thứ tự để vẫn giữ nested text
+        if(isBold && !span.closest("strong")){
+            const strong = document.createElement("strong");
+            while(node.firstChild) strong.appendChild(node.firstChild);
+            node.appendChild(strong);
+            node = strong;
+        }
+        if(isItalic && !node.closest("em")){
+            const em = document.createElement("em");
+            while(node.firstChild) em.appendChild(node.firstChild);
+            node.appendChild(em);
+        }
+        span.removeAttribute("style");
+    });
+
+    // Chuyển <b>/<i> sang ngữ nghĩa nếu cần
+    root.querySelectorAll("b").forEach(b => {
+        const s = document.createElement("strong"); s.innerHTML = b.innerHTML; b.replaceWith(s);
+    });
+    root.querySelectorAll("i").forEach(i => {
+        const e = document.createElement("em"); e.innerHTML = i.innerHTML; i.replaceWith(e);
+    });
+}
+
+// 2) Hạ H1 -> H2
+function normalizeH1ToH2(root){
+    root.querySelectorAll("h1").forEach(h1=>{
+        const h2 = document.createElement("h2");
+        h2.innerHTML = h1.innerHTML;  // GIỮ <strong>/<em>
+        h1.replaceWith(h2);
+    });
+}
+
+// 3) Tạo đủ 8 neo H2 theo TOP_TITLES (dò La Mã + tiêu đề gần nghĩa)
+function detectSectionAnchors(root, TOP_TITLES){
+    const all = Array.from(root.querySelectorAll("h2, h3, p"));
+    const used = new Set();
+
+    const ensureAnchorAt = (node, id, text) => {
+        if(node.tagName?.toLowerCase()!=="h2"){
+            const h2 = document.createElement("h2");
+            h2.innerHTML = node.innerHTML || text;
+            node.replaceWith(h2);
+            node = h2;
+        }
+        node.id = id;
+        node.classList.add("h-level-1");
+        return node;
+    };
+
+    let lastAnchor = null;
+
+    TOP_TITLES.forEach(({id, title}, idx)=>{
+        const key = toKey(title.replace(RX_ROMAN,""));
+        let found = null;
+
+        // 3.1 match La Mã hoặc chứa từ khoá
+        for(const node of all){
+            if(used.has(node)) continue;
+            const tag = node.tagName ? node.tagName.toLowerCase() : "";
+            const txt = toKey(node.textContent||"");
+            const looksRoman = RX_ROMAN.test(node.textContent||"");
+            const looksTitle = txt.includes(key) || key.includes(txt) && txt.length>0;
+            if((tag==="h2"||tag==="h3"||tag==="p") && (looksRoman || looksTitle)){
+                found = node; break;
+            }
+        }
+
+        if(found){
+            used.add(found);
+            lastAnchor = ensureAnchorAt(found, id, title);
+        } else {
+            // 3.2 không tìm được → chèn mới theo thứ tự
+            const auto = document.createElement("h2");
+            auto.textContent = title;
+            auto.id = id;
+            auto.className = "h-level-1";
+            if(lastAnchor){
+                // chèn sau neo trước đó
+                lastAnchor.after(auto);
+            } else {
+                // chèn đầu root
+                root.insertBefore(auto, root.firstChild);
+            }
+            lastAnchor = auto;
+        }
+    });
+}
+
+// 4) Cắt thành 8 section theo neo
+function sliceIntoEightSections(root, TOP_TITLES){
+    const frag = document.createDocumentFragment();
+
+    // Lấy mảng anchor (giữ reference gốc trong DOM hiện tại)
+    const anchors = TOP_TITLES.map(s => root.querySelector(`h2#${s.id}`)).filter(Boolean);
+
+    // Đi lần lượt từng anchor
+    anchors.forEach((anchor, i) => {
+        const nextAnchor = anchors[i+1] || null;
+
+        // *** SNAPSHOT con trỏ bắt đầu TRƯỚC khi di chuyển anchor ***
+        let start = anchor.nextSibling;   // <-- điểm bắt đầu nội dung của mục i
+        const stop  = nextAnchor;         // <-- dừng trước anchor tiếp theo
+
+        // Tạo section và đưa H2 (anchor) vào trước
+        const sec = document.createElement("section");
+        sec.className = "section-card level-1";
+        sec.id = anchor.id;
+        sec.appendChild(anchor);  // di chuyển h2 vào section
+
+        // Di chuyển toàn bộ node giữa 2 anchor vào section
+        let cur = start;
+        while (cur && cur !== stop) {
+            const nxt = cur.nextSibling;  // snapshot trước khi di chuyển
+            sec.appendChild(cur);
+            cur = nxt;
+        }
+
+        frag.appendChild(sec);
+    });
+
+    return frag;
+}
+
+// 5) Cleanup an toàn (xoá rác nhưng KHÔNG mất bold/italic)
+function safeCleanup(root){
+    // gỡ các nút copy/evidence
+    root.querySelectorAll(".copy-btn").forEach(el => el.remove());
+    root.querySelectorAll(".evidence").forEach(el => {
+        const p = el.parentNode;
+        while(el.firstChild) p.insertBefore(el.firstChild, el);
+        el.remove();
+    });
+
+    // chuyển span style -> strong/em trước khi đụng style
+    convertInlineBoldItalic(root);
+
+    // chỉ xoá style còn lại (không chứa thông tin typographic quan trọng)
+    root.querySelectorAll("[style]").forEach(el => {
+        el.removeAttribute("style");
+    });
+}
+
+
+// ==== Entry: render từ DOCX đúng 8 mục, 1 lần ====
+async function rebuildFromDocx() {
+    const mount = document.getElementById("content");
+    if(!mount || mount.dataset.rendered === "true") return;
+    mount.dataset.rendered = "true";
+
+    const arrayBuffer = await fetch("/content/Outline VNR.docx").then(r=>r.arrayBuffer());
+    const { value: html } = await window.mammoth.convertToHtml({ arrayBuffer }, { styleMap: [] });
+
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+
+    safeCleanup(tmp);         // GIỮ <strong>/<em>
+    normalizeH1ToH2(tmp);     // đồng nhất cấp tiêu đề
+    detectSectionAnchors(tmp, TOP_TITLES);    // ép đủ 8 neo H2 đúng id
+    const frag = sliceIntoEightSections(tmp, TOP_TITLES); // cắt thành 8 section
+
+    // mount 1 lần, không append chồng
+    mount.replaceChildren(frag);
+
+    // Log kiểm tra sections
+    console.log("✅ Sections:", ...Array.from(frag.querySelectorAll("section.level-1")).map(s => `${s.id}:${s.childNodes.length}`));
+
+    // Rebuild TOC
+    const toc = document.getElementById("toc-list") || document.getElementById("tocList");
+    if(toc){
+        toc.innerHTML = "";
+        TOP_TITLES.forEach(({id, title})=>{
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = `#${id}`;
+            a.className = "toc-link";
+            a.textContent = title.replace(RX_ROMAN,"").trim();
+            li.appendChild(a);
+            toc.appendChild(li);
+        });
+    }
+
+    // Logs kiểm thử
+    const h1 = document.querySelectorAll("#content h1").length;
+    const h2 = document.querySelectorAll("#content h2.h-level-1").length;
+    const strong = document.querySelectorAll("#content strong").length;
+    const em = document.querySelectorAll("#content em").length;
+    console.log(`📊 After render: H1=${h1}, H2=${h2} (expect 8)`);
+    console.log(`🔤 strong=${strong}, em=${em} (must >> 0)`);
+    console.log(`✅ IDs:`, TOP_TITLES.map(x=>x.id).filter(id=>document.getElementById(id)));
     
-    // Cleanup: Loại bỏ copy buttons & wrapper thừa
-    cleanupContent();
-    
-    // Chuẩn hóa tiêu đề & chia mục tự động
-    normalizeHeadings();
-    
-    // Tích hợp ảnh vào các mục
-    mountImages();
-    
-    buildTOC();
+    // Các init khác
     setupNavigation();
     observeAnimations();
     setupFloatingButtons();
     setBuildDate();
-    
-    // Kiểm thử logic
     validateContent();
-});
+}
+
+document.addEventListener("DOMContentLoaded", rebuildFromDocx);
 
 // Render nội dung
 function render() {
     document.querySelector('#content').innerHTML = SOURCE_CONTENT;
 }
 
-// Cleanup: Loại bỏ copy buttons & wrapper thừa
+// Dọn rác an toàn (không đụng bold)
 function cleanupContent() {
-    // 1) Xoá mọi nút copy
-    document.querySelectorAll('.copy-btn').forEach(el => el.remove());
-    
-    // 2) Bỏ wrapper .evidence nhưng giữ chữ
-    document.querySelectorAll('span.evidence').forEach(sp => {
-        const txt = sp.textContent;
-        const textNode = document.createTextNode(txt);
-        sp.replaceWith(textNode);
+    const root = document.getElementById("content");
+    if (!root) return;
+    root.querySelectorAll(".copy-btn").forEach(el => el.remove());
+    root.querySelectorAll("span.evidence").forEach(s => {
+        const p = s.parentNode;
+        while (s.firstChild) p.insertBefore(s.firstChild, s);
+        s.remove();
     });
-    
-    // 3) Bỏ inline style lẻ: scroll-margin-top… khỏi H2/H3/P
-    document.querySelectorAll('[style]').forEach(el => {
-            el.removeAttribute('style');
-    });
+    root.querySelectorAll("[style]").forEach(el => el.removeAttribute("style"));
 }
 
-// Chuẩn hóa tiêu đề & chia mục tự động
+
+// Chuẩn hóa tiêu đề & chia mục tự động (legacy)
 function normalizeHeadings() {
     const content = document.getElementById('content');
     
@@ -586,28 +810,21 @@ function assignSectionIDs() {
     return;
 }
 
-// Tạo mục lục
+// 7) TOC builder (không phụ thuộc H1)
 function buildTOC() {
-    const tocList = document.getElementById('toc-list');
-    const h2Elements = document.querySelectorAll('#content h2.h-level-1');
-    
-    if (!tocList) {
-        console.error('Không tìm thấy #toc-list');
-        return;
-    }
-    
-    tocList.innerHTML = '';
-    
-    // Chỉ lấy 8 h2 chính
-    const mainH2s = Array.from(h2Elements).slice(0, 8);
-    
-    mainH2s.forEach((h2, index) => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        
+    const toc = document.getElementById("toc-list") || document.getElementById("tocList");
+    if (!toc) return;
+    toc.innerHTML = "";
+    const h2s = document.querySelectorAll("section.section-card.level-1 > h2.h-level-1");
+    h2s.forEach(h2 => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
         a.href = `#${h2.id}`;
-        a.textContent = h2.textContent.trim();
-        a.className = 'toc-link';
+        // bỏ tiền tố "I." "II." khi hiện ở TOC
+        const txt = cleanText(h2).replace(/^\s*[IVXLCDM]+\s*[\.\)\-]?\s*/i, '').trim();
+        a.textContent = txt || h2.textContent.trim();
+        a.className = "toc-link";
+        
         a.addEventListener('click', function(e) {
             e.preventDefault();
             smoothScrollTo(h2.id);
@@ -619,8 +836,9 @@ function buildTOC() {
         });
         
         li.appendChild(a);
-        tocList.appendChild(li);
+        toc.appendChild(li);
     });
+    console.log("📋 TOC mục:", h2s.length);
 }
 
 // Smooth scroll
@@ -646,9 +864,29 @@ function setupNavigation() {
         }
     });
     
+    // Header navigation links - redirect functionality
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update active state
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+    
     // Active link highlighting
     function updateActiveSection() {
-        const sections = document.querySelectorAll('#content h2[id]');
+        const sections = document.querySelectorAll('#content h1[id], #content h2[id]');
         let currentSection = '';
         
         sections.forEach(section => {
@@ -890,46 +1128,235 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Kiểm thử logic
+// Kiểm thử logic cho DOCX
 function validateContent() {
+    const h1Elements = document.querySelectorAll('#content h1.h-level-1');
     const h2Elements = document.querySelectorAll('#content h2.h-level-1');
-    const requiredIds = [
-        'mo-dau-boi-canh', 'chinh-sach-1953', 'trien-khai-1954-1955',
-        'sai-lam-1956', 'hau-qua-sua-sai', 'bai-hoc-lich-su',
-        'lien-he-hien-nay', 'ket-luan'
-    ];
+    const sections = document.querySelectorAll('#content section.section-card.level-1');
     
-    // Kiểm tra số lượng h2
-    if (h2Elements.length !== 8) {
-        console.error(`Thiếu mục I–VIII: kiểm tra lại phân tích DOCX. Tìm thấy ${h2Elements.length} h2 thay vì 8.`);
-        return false;
-    }
+    console.log(`📊 Tìm thấy ${h1Elements.length} H1, ${h2Elements.length} H2 và ${sections.length} sections`);
     
-    // Kiểm tra các ID
-    const missingIds = requiredIds.filter(id => !document.getElementById(id));
-    if (missingIds.length > 0) {
-        console.error(`Thiếu các ID: ${missingIds.join(', ')}`);
-        return false;
-    }
-    
-    // Kiểm tra chiều cao tối thiểu và đảm bảo scroll margin
-    h2Elements.forEach(h2 => {
-        const section = h2.parentElement;
-        if (section.offsetHeight < 200) {
-            section.style.minHeight = '200px';
-        }
-        
-        // Đảm bảo scroll margin cho anchor
-        h2.style.scrollMarginTop = '100px';
+    // Kiểm tra chiều cao tối thiểu và đảm bảo scroll margin cho H1 và H2
+    const allHeadings = [...h1Elements, ...h2Elements];
+    allHeadings.forEach(heading => {
+        // Scroll margin đã được set trong CSS
+        // Không cần set inline style nữa
     });
     
-    // Kiểm tra TOC có đủ 8 mục
+    // Kiểm tra TOC
     const tocLinks = document.querySelectorAll('#toc-list a');
-    if (tocLinks.length !== 8) {
-        console.warn(`TOC có ${tocLinks.length} mục thay vì 8`);
-    }
+    console.log(`📋 TOC có ${tocLinks.length} mục H1`);
     
-    console.log('');
+    // Kiểm tra strong/em tags được giữ
+    const strongTags = document.querySelectorAll('strong');
+    const emTags = document.querySelectorAll('em');
+    console.log(`🔤 Tìm thấy ${strongTags.length} <strong> và ${emTags.length} <em> tags`);
+    
+    console.log('✅ Kiểm thử logic thành công - DOCX đã được load và xử lý');
+    
+    // ====== ẢNH: CẤU HÌNH VÀ CHÈN THEO VỊ TRÍ VĂN BẢN ======
+    
+    /** 1. Cấu hình hero banner */
+    const IMAGE_HERO = {
+      url: "https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/30da43bac67c44079328641450f2dd3a_result.jpeg",
+      title: "Toàn cảnh CCRD",
+    };
+
+    /** 2. Các slot ảnh cần chèn sau các câu cụ thể trong nội dung */
+    const IMAGE_SLOTS = [
+      {
+        id: "geneva-1954",
+        findText:
+          "Ngày 21-7-1954, Hiệp định Geneva được ký kết, chấm dứt chiến tranh, lập lại hòa bình ở Đông Dương. Hiệp định quy định việc tập kết, chuyển quân, và việc tạm thời chia cắt Việt Nam thành hai miền tại vĩ tuyến 17.",
+        images: [
+          {
+            url: "https://lichsuvn.net/trang-chu/wp-content/uploads/2021/07/A0235B3A-7E50-4D7B-A5D1-5443685F23ED.jpeg",
+            title: "Ký kết Hiệp định Geneva 1954",
+          },
+        ],
+      },
+      {
+        id: "sau-1954-heading",
+        findText: "Trình bày hoàn cảnh lịch sử sau 1954",
+        images: [
+          {
+            url: "https://file3.qdnd.vn/data/images/0/2024/07/21/upload_2299/1225635950pm.jpg?dpi=150&quality=100&w=870",
+            title: "Nhân dân Thái Nguyên tổ chức mít tinh chào mừng Hội nghị Geneva năm 1954 - Ảnh tư liệu.",
+          },
+        ],
+      },
+      {
+        id: "hoan-canh-chung",
+        findText: "Hoàn cảnh chung:",
+        images: [
+          {
+            url: "https://file3.qdnd.vn/data/images/0/2020/09/01/nguyenthao/cmt8.jpg",
+            title: "CMT8",
+          },
+        ],
+      },
+      {
+        id: "giam-to-tu-tuc-anh4",
+        findText:
+          "Trong một số vùng giải phóng (Thái Nguyên, Tuyên Quang...), nhân dân được giảm 25–50% tô tức",
+        images: [
+          { url: "https://usvietnam.uoregon.edu/wp-content/uploads/2023/03/1.jpg", title: "" },
+          { url: "https://usvietnam.uoregon.edu/wp-content/uploads/2023/03/2.jpg", title: "Bản “Ý kiến sơ bộ về vận động quần chúng năm 1953” của La Quý Ba," },
+          { url: "https://usvietnam.uoregon.edu/wp-content/uploads/2023/03/3.jpg", title: "" },
+          { url: "https://usvietnam.uoregon.edu/wp-content/uploads/2023/03/4.jpg", title: "" },
+        ],
+      },
+      {
+        id: "buoc-chuan-bi",
+        findText:
+          "Đề ra các bước chuẩn bị: điều tra xã hội học nông thôn, tuyên truyền giáo dục, đào tạo cán bộ.",
+        images: [
+          { url: "https://images.hcmcpv.org.vn//Uploads/Image/02022022AC1CA2D/02-02-2022Chanhcuong.jpg", title: "Ảnh tư liệu về Chánh cương vắn tắt, Sách lược vắn tắt, do lãnh tụ Nguyễn Ái Quốc soạn thảo, tháng 2/1930." },
+        ],
+      },
+      {
+        id: "doi-ccrd-nong-cot-2anh",
+        findText:
+          "Luật quy định tổ chức \"đội cải cách ruộng đất\" làm nòng cốt triển khai tại cơ sở.",
+        images: [
+          { url: "https://wikiwandv2-19431.kxcdn.com/_next/image?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/C%25E1%25BA%25A3i_c%25C3%25A1ch_ru%25E1%25BB%2599ng_%25C4%2591%25E1%25BA%25A5t_th%25E1%25BA%25AFng_l%25E1%25BB%25A3i%252C_n%25C3%25B4ng_d%25C3%25A2n_vui_s%25C6%25B0%25E1%25BB%259Bng_%25C4%2591%25E1%25BB%2591t_v%25C4%2583n_t%25E1%25BB%25B1_c%25C5%25A9.jpg/640px-C%25E1%25BA%25A3i_c%25C3%25A1ch_ru%25E1%25BB%2599ng_%25C4%2591%25E1%25BA%25A5t_th%25E1%25BA%25AFng_l%25E1%25BB%25A3i%252C_n%25C3%25B4ng_d%25C3%25A2n_vui_s%25C6%25B0%25E1%25BB%259Bng_%25C4%2591%25E1%25BB%2591t_v%25C4%2583n_t%25E1%25BB%25B1_c%25C5%25A9.jpg&w=640&q=50", title: "Cải cách ruộng đất hoàn tất, nông dân đốt văn tự cũ" },
+          { url: "https://hung-viet.org/images/file/lUZf-r781wgBAF8b/ho-chi-minh-noi-ve-cai-cach-ruong-dat-ngay-4-12-1953.jpg", title: "Ảnh tư liệu ngày 4/12/1953" },
+        ],
+      },
+      {
+        id: "giam-con-30-2anh",
+        findText:
+          "Có nơi, tô tức giảm từ 50% còn 30%, giúp dân tăng sản lượng lúa vụ mùa (1953–1954).",
+        images: [
+          { url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSFlfQ1HKpvKu3kQfqCqtfV49iJSsCFO04vQS7bkxxXNrIwVI_a088Qpbus9z3qHu9rpemg4_R-pHt9_Kla76IJiWRBMQy6fRA2laOBN3qfv7Ttn7-yprUPk9azZ8D8vwca5zGvckNB1WM/s640/N%25C3%25B4ng+d%25C3%25A2n+vui+m%25E1%25BB%25ABng+khi+%25C4%2591%25C6%25B0%25E1%25BB%25A3c+nh%25E1%25BA%25ADn+ru%25E1%25BB%2599ng+%25C4%2591%25E1%25BA%25A5t_result.jpg", title: " Nông dân vui mừng khi được nhận ruộng đất." },
+          { url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiX4iNAzDa-egXEaSq7ZEIGo0nUJcAHy_UoqAD2h-rVVhYgkPx2EX1YR9hcTuHckiN8yHc-8YnFIim_ATM_-kJ6MJjQRN3-hnwcP1kBWlwh-S8MTZ-tfK2LrPlxU0ycR03iEqB4pCaTe0zg/s640/%25C4%2590%25C6%25B0%25E1%25BB%25A3c+chia+ru%25E1%25BB%2599ng+%25C4%2591%25E1%25BA%25A5t%252C+tr%25E1%25BB%2593ng+c%25E1%25BA%25A5y+%25C4%2591%25C6%25B0%25E1%25BB%25A3c+m%25C3%25B9a%252C+ng%25C6%25B0%25E1%25BB%259Di+n%25C3%25B4ng+d%25C3%25A2n+ph%25E1%25BA%25A5n+kh%25E1%25BB%259Fi+%25C4%2591%25C3%25B3ng+g%25C3%25B3p+thu%25E1%25BA%25BF+n%25C3%25B4ng+nghi%25E1%25BB%2587p._result.JPG", title: " Được chia ruộng đất, trồng cấy được mùa, người nông dân phấn khởi đóng góp thuế nông nghiệp." },
+        ],
+      },
+      {
+        id: "trien-khai-1954-1955-mo-dau",
+        findText:
+          "Trong giai đoạn 1954–1955, chính sách được tăng tốc triển khai với các nội dung chính.",
+        images: [
+          { url: "https://github.com/huytran2810-tech/VNRG2/blob/main/assets/images/ccrd/30da43bac67c44079328641450f2dd3a_result.jpeg?raw=true", title: "Triển khai trên diện rộng" },
+        ],
+      },
+      {
+        id: "muc-tieu-moi-nong-dan-co-dat",
+        findText:
+          "Mục tiêu là để mọi nông dân đều có đất cày cấy, củng cố lòng tin của quần chúng vào Đảng và Chính phủ.",
+        images: [
+          { url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSFlfQ1HKpvKu3kQfqCqtfV49iJSsCFO04vQS7bkxxXNrIwVI_a088Qpbus9z3qHu9rpemg4_R-pHt9_Kla76IJiWRBMQy6fRA2laOBN3qfv7Ttn7-yprUPk9azZ8D8vwca5zGvckNB1WM/s640/N%25C3%25B4ng+d%25C3%25A2n+vui+m%25E1%25BB%25ABng+khi+%25C4%2591%25C6%25B0%25E1%25BB%25A3c+nh%25E1%25BA%25ADn+ru%25E1%25BB%2599ng+%25C4%2591%25E1%25BA%25A5t_result.jpg", title: " Nông dân vui mừng khi được nhận ruộng đất." },
+        ],
+      },
+      {
+        id: "phuong-phap-lanh-dao-cuc-doan",
+        findText:
+          "Phương pháp lãnh đạo thiếu dân chủ, mang tính mệnh lệnh và áp đặt, nhiều nơi sử dụng bạo lực và hình thức đấu tố cực đoan, gây tổn thất niềm tin giữa Đảng và nhân dân.",
+        images: [
+          { url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUph2F37p0F0bubV4XWPfHhG1s0xHeXOUyXBQOYIHBWvjlZw7AWwiRGEQxgXIdTwzG1vXGKNIZgRiOz-e0CviRXX1TGv6URiQLzgXITys5kljttOydMX2efViGfcG-HlvwwDBCh8nimG8p/s640/trial-of-a-bourgeois-landowner-in-north-vietnam-1955---u-t-a-ch-ti-bc-vit_5124618507_o_result.jpg", title: " Nông dân tố cáo địa chủ trước tòa án nhân dân đặc biệt do nông dân địa phương tự lập ra." },
+        ],
+      },
+      {
+        id: "chi-dao-sua-sai",
+        findText:
+          "Công tác sửa sai được chỉ đạo \"thành khẩn, kiên quyết, khẩn trương, thận trọng, có kế hoạch chặt chẽ\", giúp từng bước khôi phục niềm tin của quần chúng.",
+        images: [
+          { url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg6n35jQyWxO-4aajNpBWzIwwRLEZyxSCm9cS0tbWQvxGJ_xZhYDjq_s5ofQd1IRThNMjz1Go6-n0jCVkVPqRQnIZnzMwdFZ5-nWdMpK4EAE5-1QqPqmuzJnzZ-L_xjvQxp8BvRN9gzwwRL/s640/trial-of-a-bourgeois-landowner-in-north-vietnam-1955_5125225160_o_result.jpg", title: " Nông dân tố cáo địa chủ trước tòa án nhân dân đặc biệt do nông dân địa phương tự lập ra." },
+        ],
+      },
+      {
+        id: "khong-khi-so-hai",
+        findText:
+          "Nhiều người bị quy sai là địa chủ, bị xử bắn hoặc tù đày oan uổng, gây tổn thất lớn về sinh mạng và tinh thần cho nhân dân. Không khí sợ hãi, nghi kỵ và tố cáo lẫn nhau lan rộng khắp nông thôn, làm rạn nứt mối quan hệ gia đình, họ hàng, làng xóm vốn bền chặt từ bao đời.",
+        images: [
+          { url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg6n35jQyWxO-4aajNpBWzIwwRLEZyxSCm9cS0tbWQvxGJ_xZhYDjq_s5ofQd1IRThNMjz1Go6-n0jCVkVPqRQnIZnzMwdFZ5-nWdMpK4EAE5-1QqPqmuzJnzZ-L_xjvQxp8BvRN9gzwwRL/s640/trial-of-a-bourgeois-landowner-in-north-vietnam-1955_5125225160_o_result.jpg", title: " Nông dân tố cáo địa chủ trước tòa án nhân dân đặc biệt do nông dân địa phương tự lập ra." },
+        ],
+      },
+      {
+        id: "ky-luat-lanh-dao",
+        findText:
+          "Ông Lê Văn Lương rút khỏi Bộ Chính trị, Ban Bí thư; ông Hồ Viết Thắng ra khỏi Ban Chấp hành Trung ương Đảng…",
+        images: [
+          { url: "https://upload.wikimedia.org/wikipedia/commons/4/49/HoChiMinhApology1956.png", title: "Chủ tịch Hồ Chí Minh thừa nhận sai phạm trong cải cách" },
+        ],
+      },
+      {
+        id: "vi-du-thuc-te-nong-thon-moi",
+        findText:
+          "Ví dụ thực tế: Các chương trình \"xây dựng nông thôn mới nâng cao\", \"chuyển đổi số trong nông nghiệp\", và các mô hình hợp tác xã công nghệ cao ở Đồng Tháp, Lâm Đồng đang kế thừa tinh thần \"người cày có ruộng\" nhưng theo hướng người nông dân có quyền, có kiến thức và có lợi ích bền vững.",
+        images: [
+          { url: "https://github.com/huytran2810-tech/VNRG2/blob/main/assets/images/ccrd/2_20240328084651.png?raw=true", title: "Nông thôn mới nâng cao" },
+        ],
+      },
+    ];
+
+    /* ========== UTIL: tìm đoạn p chứa câu, chèn block ảnh ngay sau nó ========== */
+    function normalizeText(s) {
+      return (s || "")
+        .replace(/\s+/g, " ")
+        .replace(/[""]/g, '"')
+        .replace(/['']/g, "'")
+        .trim();
+    }
+
+    function findParagraphByContains(root, raw) {
+      const needle = normalizeText(raw);
+      const paragraphs = root.querySelectorAll("p, li, h2, h3, h4");
+      for (const el of paragraphs) {
+        const txt = normalizeText(el.textContent || "");
+        if (txt.includes(needle)) return el;
+      }
+      return null;
+    }
+
+    function createImageBlock(images) {
+      const wrap = document.createElement("figure");
+      wrap.className = images.length > 1 ? "img-gallery" : "img-block";
+      images.forEach((img) => {
+        const fig = document.createElement("figure");
+        fig.className = "img-item";
+        const el = document.createElement("img");
+        el.loading = "lazy";
+        el.decoding = "async";
+        el.src = img.url;
+        el.alt = img.title || "";
+        const cap = document.createElement("figcaption");
+        cap.textContent = img.title || "";
+        fig.appendChild(el);
+        fig.appendChild(cap);
+        wrap.appendChild(fig);
+      });
+      return wrap;
+    }
+
+    /* Chèn ảnh hero */
+    function applyHeroBanner() {
+      const hero = document.querySelector("#hero");
+      if (!hero) return;
+      hero.style.setProperty("--hero-bg", `url("${IMAGE_HERO.url}")`);
+      const titleEl = hero.querySelector(".hero-title");
+      if (titleEl && IMAGE_HERO.title) titleEl.setAttribute("title", IMAGE_HERO.title);
+    }
+
+    /* Chèn ảnh theo slot */
+    function applyImageSlots() {
+      const root = document.querySelector("#content");
+      if (!root) return;
+      IMAGE_SLOTS.forEach((slot) => {
+        const at = findParagraphByContains(root, slot.findText);
+        if (!at) {
+          console.warn("⚠️ Không tìm thấy vị trí slot:", slot.id);
+          return;
+        }
+        const block = createImageBlock(slot.images);
+        at.insertAdjacentElement("afterend", block);
+      });
+    }
+
+    /* Gọi các hàm này NGAY SAU khi bạn đã render xong docx vào #content */
+    applyHeroBanner();
+    applyImageSlots();
+    
     return true;
 }
 
