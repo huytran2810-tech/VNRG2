@@ -864,3 +864,4 @@ function validateContent() {
 
 
 // Evidence highlighting và copy buttons đã được loại bỏ
+
