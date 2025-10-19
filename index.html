@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCRD — Tư liệu lịch sử</title>
+    <title>VNR202 — Tư liệu lịch sử</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <span class="logo-text">CCRD</span>
+                <span class="logo-text">VNR202G2</span>
             </div>
             <div class="nav-menu" id="nav-menu">
                 <a href="#mo-dau-boi-canh" class="nav-link">Bối cảnh</a>
@@ -38,7 +38,7 @@
     <section class="hero" id="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1 class="hero-title" data-animate="fade-up">CCRD — Tư liệu lịch sử</h1>
+            <h1 class="hero-title" data-animate="fade-up">VNR202 — Tư liệu lịch sử</h1>
             <p class="hero-subtitle" data-animate="fade-up" data-delay="200">Cải cách Ruộng đất Việt Nam – Bối cảnh, Chính sách và Bài học</p>
             <button class="btn btn-primary" data-animate="fade-up" data-delay="400" onclick="scrollToSection('mo-dau-boi-canh')">
                 Khám phá nội dung
@@ -52,16 +52,18 @@
         </div>
     </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="content-container">
-            <!-- Content will be rendered here by JavaScript -->
-            <div id="content"></div>
-        </div>
-    </main>
+    <!-- Page Grid Wrapper -->
+    <div class="page-grid">
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-container">
+                <!-- Content will be rendered here by JavaScript -->
+                <div id="content"></div>
+            </div>
+        </main>
 
-    <!-- Table of Contents -->
-    <aside class="toc" id="toc">
+        <!-- Table of Contents -->
+        <aside class="toc" id="toc">
         <div class="toc-header">
             <h3>Mục lục</h3>
             <button class="toc-toggle" id="toc-toggle">×</button>
@@ -70,6 +72,7 @@
             <!-- Will be populated by JavaScript -->
         </ul>
     </aside>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -110,6 +113,8 @@
         </button>
     </div>
 
+    <!-- Mammoth.js for DOCX parsing -->
+    <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
