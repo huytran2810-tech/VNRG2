@@ -51,7 +51,6 @@ const SOURCE_CONTENT = `
 
 <h2><strong>II. Chính sách 1953</strong></h2>
 <p>1.Chính sách năm 1953 (Chính sách Ruộng đất 1953)</p>
-<p><strong>Dàn ý:</strong></p>
 <p><strong>Bối cảnh ra đời</strong>:</p>
 <p>Kháng chiến chống Pháp bước vào giai đoạn quyết định (chiến dịch Đông Xuân 1953–1954).</p>
 <p>Yêu cầu tăng cường hậu phương, động viên nhân dân nông thôn.</p>
@@ -61,15 +60,12 @@ const SOURCE_CONTENT = `
 <p><strong>Mục tiêu</strong>:</p>
 <p>Giải phóng lực lượng sản xuất, tạo cơ sở chính trị vững chắc cho cách mạng.</p>
 <p>Củng cố khối liên minh công – nông.</p>
-<p><strong>Key chính:</strong></p>
 <p>"<strong>Ruộng đất về tay dân cày</strong>" – Khẩu hiệu xuyên suốt.</p>
 <p>Chính sách mang tính <strong>cách mạng dân chủ mới</strong>, chuyển biến từ tuyên truyền sang hành động cụ thể.</p>
 <p>Từng bước tiến lên: <strong>giảm tô → cải cách ruộng đất triệt để</strong>.</p>
 <p><strong>Dẫn chứng:</strong></p>
 <p>Chỉ thị của Ban Chấp hành Trung ương tháng 5/1953: Xác định rõ đường lối cải cách ruộng đất.</p>
 <p>Trong một số vùng giải phóng (Thái Nguyên, Tuyên Quang...), nhân dân được giảm 25–50% tô tức.</p>
-<p><strong>2. Hội nghị Trung ương 4, Trung ương 5 và Cương lĩnh ruộng đất 23 điều</strong></p>
-<p><strong>Dàn ý:</strong></p>
 <p><strong>Hội nghị TW 4 (12/1951)</strong>:</p>
 <p>Bắt đầu đặt vấn đề cải cách ruộng đất như một nhiệm vụ chính trị - kinh tế cấp bách.</p>
 <p>Đề ra các bước chuẩn bị: điều tra xã hội học nông thôn, tuyên truyền giáo dục, đào tạo cán bộ.</p>
@@ -84,7 +80,6 @@ const SOURCE_CONTENT = `
 <p><strong>Trưng thu ruộng đất của địa chủ thường.</strong></p>
 <p><strong>Giữ lại ruộng đất của nông dân, tư sản nhỏ.</strong></p>
 <p>Nhấn mạnh quyền làm chủ ruộng đất của nông dân.</p>
-<p><strong>Key chính:</strong></p>
 <p>Phân hóa địa chủ → xác định rõ kẻ thù chính.</p>
 <p>Kết hợp giữa <strong>đấu tranh giai cấp</strong> và <strong>xây dựng chính quyền nông thôn</strong>.</p>
 <p>Hệ thống hóa lý luận cải cách bằng 23 điều rõ ràng, chặt chẽ.</p>
@@ -92,7 +87,6 @@ const SOURCE_CONTENT = `
 <p>Hồ sơ của Đảng ghi nhận tại TW 5: xác định khẩu hiệu "Người cày có ruộng" đi vào hiện thực.</p>
 <p>Bản "Cương lĩnh 23 điều" là tài liệu cốt lõi cho mọi cuộc cải cách giai đoạn 1953–1956.</p>
 <p><strong>3. Quốc hội thông qua Luật cải cách ruộng đất (4/12/1953), Chủ tịch Hồ Chí Minh ký Sắc lệnh số 197-SL (19/12/1953)</strong></p>
-<p><strong>Dàn ý:</strong></p>
 <p><strong>Quốc hội khóa I, kỳ họp thứ 3 (tháng 12/1953)</strong>:</p>
 <p>Thông qua <strong>Luật cải cách ruộng đất</strong> – văn bản pháp lý cao nhất thời kỳ này.</p>
 <p>Khẳng định tính hợp pháp của việc tịch thu, trưng thu, chia lại ruộng đất.</p>
@@ -100,7 +94,6 @@ const SOURCE_CONTENT = `
 <p><strong>Chủ tịch Hồ Chí Minh ký Sắc lệnh 197-SL ngày 19/12/1953</strong>:</p>
 <p>Chính thức công bố Luật.</p>
 <p>Tạo hành lang pháp lý cho việc triển khai trên thực địa.</p>
-<p><strong>Key chính:</strong></p>
 <p><strong>Luật hóa chính sách cải cách</strong> – từ chủ trương Đảng sang chính sách Nhà nước.</p>
 <p>Khẳng định quyền làm chủ ruộng đất của nông dân.</p>
 <p>Bước ngoặt pháp lý trong cách mạng dân tộc – dân chủ.</p>
@@ -108,7 +101,6 @@ const SOURCE_CONTENT = `
 <h3>Sắc lệnh 197-SL ghi rõ: "Những ruộng đất tịch thu từ địa chủ phản động sẽ chia cho nông dân không bồi hoàn."</h3>
 <p>Luật quy định tổ chức "đội cải cách ruộng đất" làm nòng cốt triển khai tại cơ sở.</p>
 <p><strong>4. Chính sách giảm tô, giảm tức</strong></p>
-<p><strong>Dàn ý:</strong></p>
 <p><strong>Khái niệm</strong>:</p>
 <p>"Tô" là phần nông dân phải nộp cho địa chủ khi thuê ruộng đất.</p>
 <p>"Tức" là phần sản lượng hoặc tiền phải trả thêm, ngoài tô (nặng hơn tô).</p>
@@ -120,7 +112,6 @@ const SOURCE_CONTENT = `
 <p>Gây dựng lòng tin trong dân chúng.</p>
 <p>Cô lập địa chủ, lôi kéo trung nông.</p>
 <p>Làm cơ sở cho cải cách triệt để sau này.</p>
-<p><strong>Key chính:</strong></p>
 <p><strong>"Trước khi đánh thì chia" – Chính sách mềm hóa, chuẩn bị cải cách triệt để.</strong></p>
 <p>Đòn "mở đường" trong tiến trình cải cách.</p>
 <p>Giảm căng thẳng xã hội, tránh xung đột bạo lực ban đầu.</p>
@@ -177,14 +168,14 @@ const SOURCE_CONTENT = `
 <p>Cải cách ruộng đất (1953–1956) là một chủ trương lớn của Đảng nhằm xóa bỏ giai cấp địa chủ phong kiến, thực hiện người cày có ruộng, góp phần củng cố hậu phương kháng chiến. Tuy nhiên, khi được triển khai, đường lối đúng đắn này đã bị sai lệch trong quá trình thực hiện, dẫn đến những sai lầm nghiêm trọng năm 1956.</p>
 <p><strong>Các sai lầm cụ thể được nêu trong tài liệu</strong></p>
 <p>Sai lầm về nhận thức và phương pháp</p>
-<p><strong>Nguyên nhân chủ yếu</strong>: "<strong>Chủ quan, giáo điều, không xuất phát từ thực tiễn</strong>" — nghĩa là cán bộ cải cách đã <strong>rập khuôn máy móc kinh nghiệm nước ngoài</strong> (Trung Quốc, Liên Xô), <strong>không phù hợp với tình hình giai cấp ở nông thôn Việt Nam</strong> sau khi giải phóngGT học phần Lịch sử Đảng cộng s…</p>
+<p><strong>Nguyên nhân chủ yếu</strong>: "<strong>Chủ quan, giáo điều, không xuất phát từ thực tiễn</strong>" — nghĩa là cán bộ cải cách đã <strong>rập khuôn máy móc kinh nghiệm nước ngoài</strong> (Trung Quốc, Liên Xô), <strong>không phù hợp với tình hình giai cấp ở nông thôn Việt Nam</strong> sau khi giải phóng</p>
 <p>Đảng đã <strong>"cường điệu hóa đấu tranh giai cấp ở nông thôn"</strong>, mở rộng quá mức đối tượng bị quy là địa chủ, phản động, dẫn đến <strong>nhiều vụ xử oan sai, thậm chí xử tử oan</strong>.</p>
 <p>Sai lầm trong tổ chức và lãnh đạo</p>
 <p>Trong công tác chỉnh đốn tổ chức, Đảng <strong>"đã nhận định sai về tình hình tổ chức cơ sở Đảng ở nông thôn, cho rằng về cơ bản đã bị địch lũng đoạn"</strong>, nên <strong>xử lý oan nhiều cán bộ, đảng viên tốt</strong>.</p>
 <p>Phương pháp lãnh đạo <strong>thiếu dân chủ, mang tính mệnh lệnh và áp đặt</strong>, nhiều nơi <strong>sử dụng bạo lực và hình thức đấu tố cực đoan</strong>, gây <strong>tổn thất niềm tin giữa Đảng và nhân dân</strong>.</p>
 <p>Hậu quả và công tác sửa sai</p>
 <p>Sai lầm này đã "<strong>gây ra một số tổn thất đối với Đảng và quan hệ giữa Đảng với nhân dân</strong>".</p>
-<p><strong>Hội nghị Trung ương lần thứ 10 (tháng 9-1956)</strong> đã nghiêm khắc kiểm điểm và <strong>"công khai tự phê bình trước nhân dân"</strong>, đồng thời <strong>thi hành kỷ luật đối với một số Ủy viên Bộ Chính trị và Trung ương Đảng</strong>GT học phần Lịch sử Đảng cộng s….</p>
+<p><strong>Hội nghị Trung ương lần thứ 10 (tháng 9-1956)</strong> đã nghiêm khắc kiểm điểm và <strong>"công khai tự phê bình trước nhân dân"</strong>, đồng thời <strong>thi hành kỷ luật đối với một số Ủy viên Bộ Chính trị và Trung ương Đảng</strong></p>
 <p>Công tác <strong>sửa sai</strong> được chỉ đạo "<strong>thành khẩn, kiên quyết, khẩn trương, thận trọng, có kế hoạch chặt chẽ</strong>", giúp từng bước khôi phục niềm tin của quần chúng.</p>
 <p><strong>Nguyên nhân sâu xa</strong></p>
 <p><strong>Chủ quan, duy ý chí</strong>: Tin rằng đấu tranh giai cấp vẫn gay gắt như thời thuộc địa.</p>
@@ -297,7 +288,7 @@ const figure_hien_nay = `https://raw.githubusercontent.com/huytran2810-tech/VNRG
 const ASSET_MANIFEST = [
     {
         url: background_hero,
-        title: "Bối cảnh 1954",
+        title: "Các ủy ban đấu tố được lập ra với sự cố vấn của các cán bộ Trung Quốc",
         caption: "Miền Bắc sau giải phóng",
         tags: ["boi-canh", "1954", "hero", "banner"],
         placement: "hero",
@@ -308,11 +299,11 @@ const ASSET_MANIFEST = [
     },
     {
         url: banner_ccrd_general,
-        title: "Cải cách ruộng đất",
+        title: "Nông dân vui mừng khi được nhận ruộng đất.",
         caption: "Quá trình cải cách ruộng đất tại miền Bắc",
         tags: ["ccrd", "1953", "banner", "figure"],
         placement: "banner",
-        credit: "Tư liệu lịch sử",
+        credit: "Nguồn: Tư liệu lịch sử",
         widthHint: 1200,
         heightHint: 400,
         ratio: 3/1
@@ -330,7 +321,7 @@ const ASSET_MANIFEST = [
     },
     {
         url: figure_luat_197_sl,
-        title: "Luật CCRD 1953",
+        title: "Được chia ruộng đất, trồng cấy được mùa, người nông dân phấn khởi đóng góp thuế nông nghiệp.",
         caption: "Văn bản Luật Cải cách ruộng đất 1953",
         tags: ["1953", "luat", "197-sl", "figure"],
         placement: "figure",
@@ -396,7 +387,7 @@ const ASSET_MANIFEST = [
     },
     {
         url: banner_sua_sai,
-        title: "Hậu quả và sửa sai",
+        title: "Chủ tịch Hồ Chí Minh rơi nước mắt - thừa nhận sai sót của Đảng và Chính phủ trong cải cách ruộng đất",
         caption: "Công tác sửa sai sau cải cách ruộng đất",
         tags: ["sua-sai", "hoi-nghi-10", "banner"],
         placement: "banner",
@@ -418,8 +409,8 @@ const ASSET_MANIFEST = [
     },
     {
         url: figure_bai_hoc,
-        title: "Bài học lịch sử",
-        caption: "Rút ra bài học từ cải cách ruộng đất",
+        title: "Nhân dân Hà Nội phấn khởi chào mừng Trung ương Đảng, Chính phủ và Chủ tịch Hồ Chí Minh trở về Thủ đô sau 9 năm kháng chiến trường kỳ gian khổ (1/1/1955)",
+        caption: "Nhân dân hân hoan mừng rỡ",
         tags: ["bai-hoc", "lesson", "figure"],
         placement: "figure",
         credit: "Tư liệu lịch sử",
