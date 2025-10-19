@@ -173,10 +173,6 @@ const SOURCE_CONTENT = `
 <p>Sai lầm trong tổ chức và lãnh đạo</p>
 <p>Trong công tác chỉnh đốn tổ chức, Đảng <strong>"đã nhận định sai về tình hình tổ chức cơ sở Đảng ở nông thôn, cho rằng về cơ bản đã bị địch lũng đoạn"</strong>, nên <strong>xử lý oan nhiều cán bộ, đảng viên tốt</strong>.</p>
 <p>Phương pháp lãnh đạo <strong>thiếu dân chủ, mang tính mệnh lệnh và áp đặt</strong>, nhiều nơi <strong>sử dụng bạo lực và hình thức đấu tố cực đoan</strong>, gây <strong>tổn thất niềm tin giữa Đảng và nhân dân</strong>.</p>
-<p>Hậu quả và công tác sửa sai</p>
-<p>Sai lầm này đã "<strong>gây ra một số tổn thất đối với Đảng và quan hệ giữa Đảng với nhân dân</strong>".</p>
-<p><strong>Hội nghị Trung ương lần thứ 10 (tháng 9-1956)</strong> đã nghiêm khắc kiểm điểm và <strong>"công khai tự phê bình trước nhân dân"</strong>, đồng thời <strong>thi hành kỷ luật đối với một số Ủy viên Bộ Chính trị và Trung ương Đảng</strong></p>
-<p>Công tác <strong>sửa sai</strong> được chỉ đạo "<strong>thành khẩn, kiên quyết, khẩn trương, thận trọng, có kế hoạch chặt chẽ</strong>", giúp từng bước khôi phục niềm tin của quần chúng.</p>
 <p><strong>Nguyên nhân sâu xa</strong></p>
 <p><strong>Chủ quan, duy ý chí</strong>: Tin rằng đấu tranh giai cấp vẫn gay gắt như thời thuộc địa.</p>
 <p><strong>Sao chép mô hình nước ngoài</strong>: Áp dụng máy móc mô hình "đấu tố" kiểu Trung Quốc mà không xem xét đặc điểm xã hội Việt Nam.</p>
