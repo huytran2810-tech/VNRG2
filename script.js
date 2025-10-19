@@ -793,7 +793,7 @@ function mountImages() {
             heroImg.alt = toAlt(heroImage);
             heroImg.className = 'hero-bg';
             heroImg.loading = 'eager';
-            heroSection.style.backgroundImage = `url(/assets/images/ccrd/${heroImage.file})`;
+            heroSection.style.backgroundImage = `url(https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/assets/images/ccrd/${heroImage.file})`;
             heroSection.style.backgroundSize = 'cover';
             heroSection.style.backgroundPosition = 'center';
         }
