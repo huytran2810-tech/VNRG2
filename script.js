@@ -645,6 +645,7 @@ function safeCleanup(root){
 
 // ==== Entry: render từ DOCX đúng 8 mục, 1 lần ====
 async function rebuildFromDocx() {
+    console.log("🚀 Bắt đầu rebuildFromDocx...");
     const mount = document.getElementById("content");
     if(!mount || mount.dataset.rendered === "true") return;
     mount.dataset.rendered = "true";
@@ -721,6 +722,11 @@ async function rebuildFromDocx() {
     }
 
     console.log("📝 Tạo DOM từ HTML...");
+    console.log("🔍 HTML variable:", typeof html, html ? "exists" : "undefined");
+    if (!html) {
+        console.error("❌ HTML is undefined!");
+        return;
+    }
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
     console.log("📄 HTML length:", html.length);
