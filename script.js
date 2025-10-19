@@ -649,22 +649,40 @@ async function rebuildFromDocx() {
     if(!mount || mount.dataset.rendered === "true") return;
     mount.dataset.rendered = "true";
 
+    let html;
     try {
         // Sử dụng đường dẫn GitHub Pages thực tế
         console.log("📄 Đang load file DOCX từ GitHub...");
-        const response = await fetch("https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx");
+        console.log("🔗 URL:", "https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx");
+        
+        // Thử branch main trước, nếu không được thì thử huy
+        let response;
+        try {
+            response = await fetch("https://raw.githubusercontent.com/huytran2810-tech/VNRG2/main/content/Outline%20VNR.docx");
+            console.log("🌿 Thử branch main...");
+        } catch (e) {
+            console.log("🌿 Branch main không có, thử branch huy...");
+            response = await fetch("https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx");
+        }
+        
+        console.log("📊 Response status:", response.status, response.statusText);
+        console.log("📊 Response headers:", Object.fromEntries(response.headers.entries()));
         
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
         const arrayBuffer = await response.arrayBuffer();
-        const { value: html } = await window.mammoth.convertToHtml({ arrayBuffer }, { styleMap: [] });
+        console.log("📦 ArrayBuffer size:", arrayBuffer.byteLength);
+        
+        const { value: parsedHtml } = await window.mammoth.convertToHtml({ arrayBuffer }, { styleMap: [] });
+        html = parsedHtml;
         console.log("✅ DOCX đã được load và parse thành công từ GitHub");
+        console.log("📄 Parsed HTML length:", html.length);
     } catch (error) {
         console.error("❌ Lỗi load DOCX:", error);
         // Fallback với dữ liệu mẫu nếu không load được DOCX
-        const html = `
+        html = `
         <h1>I. Mở đầu & Bối cảnh</h1>
         <p>Sau 1954, Đảng Cộng sản Việt Nam đã lãnh đạo khôi phục và phát triển sản xuất nông nghiệp ở miền Bắc. Trong bối cảnh này, việc tiếp tục và hoàn thành cải cách ruộng đất là nhiệm vụ cấp thiết để tạo cơ sở vững chắc cho việc xây dựng chế độ mới:</p>
         
@@ -702,14 +720,18 @@ async function rebuildFromDocx() {
         console.log("⚠️ Sử dụng dữ liệu mẫu do không load được DOCX");
     }
 
+    console.log("📝 Tạo DOM từ HTML...");
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
+    console.log("📄 HTML length:", html.length);
 
+    console.log("🧹 Cleanup và normalize...");
     safeCleanup(tmp);         // GIỮ <strong>/<em>
     normalizeH1ToH2(tmp);     // đồng nhất cấp tiêu đề
     detectSectionAnchors(tmp, TOP_TITLES);    // ép đủ 8 neo H2 đúng id
     const frag = sliceIntoEightSections(tmp, TOP_TITLES); // cắt thành 8 section
 
+    console.log("🎯 Mount content...");
     // mount 1 lần, không append chồng
     mount.replaceChildren(frag);
 
