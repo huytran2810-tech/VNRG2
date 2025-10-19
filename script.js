@@ -1,7 +1,7 @@
 // SOURCE_CONTENT - Nội dung HTML sạch từ DOCX với định dạng in đậm
 const SOURCE_CONTENT = `
 <h2><strong>Mở đầu & Bối cảnh</strong></h2>
-<p><strong>Trình bày hoàn cảnh lịch sử sau 1954, lý do cần cải cách ruộng đất:a) </strong><strong>Hoàn cảnh chung:</strong></p>
+<p><strong>Trình bày hoàn cảnh lịch sử sau 1954, lý do cần cải cách ruộng đất </strong><br><br><strong>Hoàn cảnh chung:</strong></p>
 <p>Đất nước bị chia cắt: Việt Nam tạm thời bị chia cắt thành hai miền.</p>
 <p>Miền Bắc hoàn toàn giải phóng: Miền Bắc được hoàn toàn giải phóng và chuyển sang giai đoạn phục hồi kinh tế, cải tạo xã hội chủ nghĩa, chuẩn bị chuyển cách mạng miền Nam từ thế giữ gìn lực lượng sang thế tiến công.</p>
 <p>Miền Nam thành chế độ thuộc địa kiểu mới: Miền Nam vẫn nằm dưới sự cai trị khác nhau và miền Nam trở thành một quốc gia thuộc địa kiểu mới của Mỹ. Mỹ và bè lũ tay sai đã phá hoại Hiệp định Giơnevơ và tìm cách chia cắt lâu dài Việt Nam.</p>
@@ -266,7 +266,7 @@ const SECTION_MAPPING = {
 const background_hero = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/30da43bac67c44079328641450f2dd3a_result.jpeg`;
 const banner_ccrd_general = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/Cai_cach_ruong_dat5.jpg`;
 const banner_policy_1953 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/caicachruongdat.jpg`;
-const banner_sua_sai = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/HQPD_1381178844.jpg`;
+const banner_sua_sai = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/fix/assets/images/ccrd/BacHoRoiNuocMat.png`;
 
 // === ẢNH FIGURE - TRIỂN KHAI 1954-1955 ===
 const figure_trien_khai_1954 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/cai-cach-ruong-dat-1954-tai-cac-tinh-mien-bac.jpg`;
@@ -282,10 +282,16 @@ const figure_hcm_tham = `https://raw.githubusercontent.com/huytran2810-tech/VNRG
 const figure_dau_to_ceremony = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/dieuhanhchaomung_caicach.jpg`;
 const figure_dau_to_trial_1 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/trial-of-a-bourgeois-landowner-in-north-vietnam-1955_5125225272_o_result.jpg`;
 const figure_dau_to_trial_2 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/trial-of-a-bourgeois-landowner-in-north-vietnam-1955---u-t-a-ch-ti-bc-vit_5124618507_o_result (1).jpg`;
+// Local image candidate for section IV (Sai lầm 1956)
+const figure_sai_lam_local = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/Feature-32024-1.png`;
+
+// === ẢNH CHO MỤC V: HẬU QUẢ & SỬA SAI ===
+// Sử dụng một trong các ảnh trong thư mục local assets/images/ccrd
+const figure_hau_qua_sua_sai_local = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/fix/assets/images/ccrd/chutichhcm-413.jpeg`;
 
 // === ẢNH FIGURE - BÀI HỌC & HIỆN NAY ===
-const figure_bai_hoc = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/MXVQHAVVRRAMOYHDRW2CE2H6XA.jpg`;
-const figure_hien_nay = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/Screenshot 2025-10-18 164552.png`;
+const figure_bai_hoc = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/ho-chi-minh-414.jpeg`;
+const figure_hien_nay = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/2_20240328084651.png`;
 
 // Asset Manifest - Sử dụng các biến URL đã định nghĩa
 const ASSET_MANIFEST = [
@@ -367,6 +373,17 @@ const ASSET_MANIFEST = [
         ratio: 4/3
     },
     {
+        url: figure_sai_lam_local,
+        title: "Phiên đấu tố - minh họa",
+        caption: "Ảnh minh họa cho sai lầm và đấu tố trong cải cách ruộng đất (1955–1956)",
+        tags: ["sai-lam", "dau-to", "1956"],
+        placement: "figure",
+        credit: "Nguồn: Tư liệu lịch sử",
+        widthHint: 800,
+        heightHint: 600,
+        ratio: 4/3
+    },
+    {
         url: figure_hcm_tham,
         title: "Hồ Chí Minh đi thăm",
         caption: "Chủ tịch Hồ Chí Minh đi thăm nông dân",
@@ -386,7 +403,18 @@ const ASSET_MANIFEST = [
         credit: "Nguồn: Tư liệu lịch sử",
         widthHint: 1200,
         heightHint: 400,
-        ratio: 3/1
+        ratio: 1
+    },
+    {
+        url: figure_hau_qua_sua_sai_local,
+        title: "Tư liệu Tại Hội nghị lần thứ 10 (mở rộng), Ban Chấp hành Trung ương bàn về cải cách ruộng đất và chỉnh đốn tổ chức, Người tự phê bình rất nghiêm khắc: 'Khuyết điểm của tôi đã ảnh hưởng đến sai lầm của cải cách ruộng đất và chỉnh đốn tổ chức' - Biên bản Hội nghị ngày 24/9/1956, lưu tại Cục Lưu trữ Trung ương Đảng.",
+        caption: "Tư liệu Tại Hội nghị lần thứ 10 (mở rộng), Ban Chấp hành Trung ương bàn về cải cách ruộng đất và chỉnh đốn tổ chức, Người tự phê bình rất nghiêm khắc: 'Khuyết điểm của tôi đã ảnh hưởng đến sai lầm của cải cách ruộng đất và chỉnh đốn tổ chức' - Biên bản Hội nghị ngày 24/9/1956, lưu tại Cục Lưu trữ Trung ương Đảng. ",
+        tags: ["sua-sai", "dau-to", "hau-qua"],
+        placement: "figure",
+        credit: "Nguồn: Thư viện ảnh dự án",
+        widthHint: 800,
+        heightHint: 600,
+        ratio: 4/3
     },
     {
         url: figure_bai_hoc,
