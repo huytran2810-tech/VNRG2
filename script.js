@@ -450,7 +450,7 @@ const ASSET_MANIFEST = [
 ];
 
 // ===== DOCX LOADER =====
-async function loadDocxToHtml(path = "/content/Outline VNR.docx") {
+async function loadDocxToHtml(path = "https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx") {
     const res = await fetch(path);
     const arrayBuffer = await res.arrayBuffer();
     const styleMap = [
@@ -649,7 +649,7 @@ async function rebuildFromDocx() {
     if(!mount || mount.dataset.rendered === "true") return;
     mount.dataset.rendered = "true";
 
-    const arrayBuffer = await fetch("/content/Outline VNR.docx").then(r=>r.arrayBuffer());
+    const arrayBuffer = await fetch("https://raw.githubusercontent.com/huytran2810-tech/VNRG2/huy/content/Outline%20VNR.docx").then(r=>r.arrayBuffer());
     const { value: html } = await window.mammoth.convertToHtml({ arrayBuffer }, { styleMap: [] });
 
     const tmp = document.createElement("div");
