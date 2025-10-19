@@ -266,7 +266,7 @@ const SECTION_MAPPING = {
 const background_hero = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/30da43bac67c44079328641450f2dd3a_result.jpeg`;
 const banner_ccrd_general = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/Cai_cach_ruong_dat5.jpg`;
 const banner_policy_1953 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/caicachruongdat.jpg`;
-const banner_sua_sai = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/HQPD_1381178844.jpg`;
+const banner_sua_sai = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/BacHoRoiNuocMat.png`;
 
 // === ẢNH FIGURE - TRIỂN KHAI 1954-1955 ===
 const figure_trien_khai_1954 = `https://raw.githubusercontent.com/huytran2810-tech/VNRG2/refs/heads/main/assets/images/ccrd/cai-cach-ruong-dat-1954-tai-cac-tinh-mien-bac.jpg`;
